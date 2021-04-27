@@ -1,9 +1,13 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use TCPDF; 
+use setasign\Fpdi\Fpdi;
+use Auth; 
+
+date_default_timezone_set('Europe/Warsaw');
 
 class AgreementsController extends Controller
 {
@@ -24,237 +28,99 @@ class AgreementsController extends Controller
      */
     public function create(Request $request)
     {
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new FPDI('p');
 
-// set document information
-$pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('Wojciech Klimaszewski');
-$pdf->SetTitle('Umowa');
-$pdf->SetSubject('Umowa kliencka');
-$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        $pagecount = $pdf->setSourceFile( 'szablon.pdf' );
 
-// set default header data
-$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, "TYtuł tu jest", "tu jakis string");
+        $tpl = $pdf->importPage(1);
+        $pdf->AddPage();
 
-// set header and footer fonts
-$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+        $pdf->useTemplate($tpl);
 
-// set default monospaced font
-$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+        $pdf->SetFont('Arial');
 
-// set margins
-$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        //logo
+        $pdf->Image('assets/img/logo.png', 5, 5, 45, 11);
 
-// set auto page breaks
-$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->SetFontSize('14'); 
 
-// set image scale factor
-$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->SetXY(1, 13.5); 
+        //numer umowy
+        $stala = 3250; 
+        $numer = ($stala+Auth::user()->id)."/".date("Y-m-d");
+        $pdf->Cell(208, 10, "Nr ".$numer, 0, 0, 'C'); 
 
-// set some language-dependent strings (optional)
-if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-    require_once(dirname(__FILE__).'/lang/eng.php');
-    $pdf->setLanguageArray($l);
-}
+        //data zawarcia umowy
+        $pdf->SetFontSize('9'); 
+        $pdf->SetXY(62, 34.3); 
+        $pdf->Cell(0, 10, date("Y-m-d"), 0, 0, 'L'); 
 
-// ---------------------------------------------------------
+        $pdf->AddFont('arialbdpl', '','arialbdpl.php'); 
+        $pdf->SetFont('arialbdpl'); 
+        $pdf->SetFontSize('11');
 
-// set font
-$pdf->SetFont('helvetica', '', 10);
+        //id abonenta
+        $pdf->SetXY(80.5, 58.5);
+        $pdf->Cell(0, 10, '223231', 0, 1, 'L');
+        
+        //Imie i nazwisko
+        $imieNazwisko = $request->get('name')." ". $request->get('surname'); 
+        $pdf->SetXY(51,65.5);
+        $pdf->Cell(0, 10, $imieNazwisko, 0, 0, 'L');
 
-// add a page
-$pdf->AddPage();
+        //Adres
+        $tekst = $request->input('address');
+        $str = iconv('UTF-8','iso-8859-2//TRANSLIT//IGNORE',$tekst);
 
-/* NOTE:
- * *********************************************************
- * You can load external XHTML using :
- *
- * $html = file_get_contents('/path/to/your/file.html');
- *
- * External CSS files will be automatically loaded.
- * Sometimes you need to fix the path of the external CSS.
- * *********************************************************
- */
+        $pdf->SetXY(35.5,72.5);
+        $pdf->Cell(00, 10, $str, 0, 0, 'L');
 
-// define some HTML content with style
-$html = <<<EOF
-<!-- EXAMPLE OF CSS STYLE -->
-<style>
-    h1 {
-        color: navy;
-        font-family: times;
-        font-size: 24pt;
-        text-decoration: underline;
-    }
-    p.first {
-        color: #003300;
-        font-family: helvetica;
-        font-size: 12pt;
-    }
-    p.first span {
-        color: #006600;
-        font-style: italic;
-    }
-    p#second {
-        color: rgb(00,63,127);
-        font-family: times;
-        font-size: 12pt;
-        text-align: justify;
-    }
-    p#second > span {
-        background-color: #FFFFAA;
-    }
-    table.first {
-        color: #003300;
-        font-family: helvetica;
-        font-size: 8pt;
-        border-left: 3px solid red;
-        border-right: 3px solid #FF00FF;
-        border-top: 3px solid green;
-        border-bottom: 3px solid blue;
-        background-color: #ccffcc;
-    }
-    td {
-        border: 2px solid blue;
-        background-color: #ffffee;
-    }
-    td.second {
-        border: 2px dashed green;
-    }
-    div.test {
-        color: #CC0000;
-        background-color: #FFFF66;
-        font-family: helvetica;
-        font-size: 10pt;
-        border-style: solid solid solid solid;
-        border-width: 2px 2px 2px 2px;
-        border-color: green #FF00FF blue red;
-        text-align: center;
-    }
-    .lowercase {
-        text-transform: lowercase;
-    }
-    .uppercase {
-        text-transform: uppercase;
-    }
-    .capitalize {
-        text-transform: capitalize;
-    }
-</style>
+        //nr telefonu
+        $pdf->SetXY(38,79.5);
+        $pdf->Cell(20, 10, $request->input('tel'), 0, 0, 'L');
 
-<h1 class="title">Example of <i style="color:#990000">XHTML + CSS</i></h1>
+        //email
+        $pdf->SetXY(36,86);
+        $pdf->Cell(20, 10, Auth::user()->email, 0, 0, 'L');
+        
+        $pdf->SetFontSize('8');
 
-<p class="first">Example of paragraph with class selector. <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed imperdiet lectus. Phasellus quis velit velit, non condimentum quam. Sed neque urna, ultrices ac volutpat vel, laoreet vitae augue. Sed vel velit erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Cras eget velit nulla, eu sagittis elit. Nunc ac arcu est, in lobortis tellus. Praesent condimentum rhoncus sodales. In hac habitasse platea dictumst. Proin porta eros pharetra enim tincidunt dignissim nec vel dolor. Cras sapien elit, ornare ac dignissim eu, ultricies ac eros. Maecenas augue magna, ultrices a congue in, mollis eu nulla. Nunc venenatis massa at est eleifend faucibus. Vivamus sed risus lectus, nec interdum nunc.</span></p>
+        //usluga
+        $pdf->SetXY(61,111);
+        $pdf->Cell(20, 10, $request->input('usluga'), 0, 0, 'L');
 
-<p id="second">Example of paragraph with ID selector. <span>Fusce et felis vitae diam lobortis sollicitudin. Aenean tincidunt accumsan nisi, id vehicula quam laoreet elementum. Phasellus egestas interdum erat, et viverra ipsum ultricies ac. Praesent sagittis augue at augue volutpat eleifend. Cras nec orci neque. Mauris bibendum posuere blandit. Donec feugiat mollis dui sit amet pellentesque. Sed a enim justo. Donec tincidunt, nisl eget elementum aliquam, odio ipsum ultrices quam, eu porttitor ligula urna at lorem. Donec varius, eros et convallis laoreet, ligula tellus consequat felis, ut ornare metus tellus sodales velit. Duis sed diam ante. Ut rutrum malesuada massa, vitae consectetur ipsum rhoncus sed. Suspendisse potenti. Pellentesque a congue massa.</span></p>
+        //cena miesiecznie
+        $pdf->SetXY(75,115);
+        $pdf->Cell(20, 10, "50,00 PLN", 0, 0, 'L');
 
-<div class="test">example of DIV with border and fill.
-<br />Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-<br /><span class="lowercase">text-transform <b>LOWERCASE</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
-<br /><span class="uppercase">text-transform <b>uppercase</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
-<br /><span class="capitalize">text-transform <b>cAPITALIZE</b> Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
-</div>
+        //cena aktywacji
+        $pdf->SetXY(73,119);
+        $pdf->Cell(20, 10, "1,00 PLN", 0, 0, 'L');
 
-<br />
+        //email
+        $pdf->SetXY(152,139.5);
+        $pdf->Cell(20, 10, Auth::user()->email, 0, 0, 'L');
 
-<table class="first" cellpadding="4" cellspacing="6">
- <tr>
-  <td width="30" align="center"><b>No.</b></td>
-  <td width="140" align="center" bgcolor="#FFFF00"><b>XXXX</b></td>
-  <td width="140" align="center"><b>XXXX</b></td>
-  <td width="80" align="center"> <b>XXXX</b></td>
-  <td width="80" align="center"><b>XXXX</b></td>
-  <td width="45" align="center"><b>XXXX</b></td>
- </tr>
- <tr>
-  <td width="30" align="center">1.</td>
-  <td width="140" rowspan="6" class="second">XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX</td>
-  <td width="140">XXXX<br />XXXX</td>
-  <td width="80">XXXX<br />XXXX</td>
-  <td width="80">XXXX</td>
-  <td align="center" width="45">XXXX<br />XXXX</td>
- </tr>
- <tr>
-  <td width="30" align="center" rowspan="3">2.</td>
-  <td width="140" rowspan="3">XXXX<br />XXXX</td>
-  <td width="80">XXXX<br />XXXX</td>
-  <td width="80">XXXX<br />XXXX</td>
-  <td align="center" width="45">XXXX<br />XXXX</td>
- </tr>
- <tr>
-  <td width="80">XXXX<br />XXXX<br />XXXX<br />XXXX</td>
-  <td width="80">XXXX<br />XXXX</td>
-  <td align="center" width="45">XXXX<br />XXXX</td>
- </tr>
- <tr>
-  <td width="80" rowspan="2" >XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX<br />XXXX</td>
-  <td width="80">XXXX<br />XXXX</td>
-  <td align="center" width="45">XXXX<br />XXXX</td>
- </tr>
- <tr>
-  <td width="30" align="center">3.</td>
-  <td width="140">XXXX<br />XXXX</td>
-  <td width="80">XXXX<br />XXXX</td>
-  <td align="center" width="45">XXXX<br />XXXX</td>
- </tr>
- <tr bgcolor="#FFFF80">
-  <td width="30" align="center">4.</td>
-  <td width="140" bgcolor="#00CC00" color="#FFFF00">XXXX<br />XXXX</td>
-  <td width="80">XXXX<br />XXXX</td>
-  <td width="80">XXXX<br />XXXX</td>
-  <td align="center" width="45">XXXX<br />XXXX</td>
- </tr>
-</table>
-EOF;
+        //pin umowy
+        $pdf->SetXY(148.5,157.5);
+        $pdf->Cell(20, 10, "455564", 0, 0, 'L');
 
-// output the HTML content
-$pdf->writeHTML($html, true, false, true, false, '');
+        //data zakonczenia umowy
+        $pdf->SetXY(112.5,187.7);
+        $pdf->Cell(20, 10, date("Y-m-d", strtotime('+12 months')), 0, 0, 'L');
 
-// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        $pdf->SetFontSize('12');
 
-// add a page
-$pdf->AddPage();
+        //podpis klienta
+        $pdf->SetXY(25,266);
+        $pdf->Cell(60, 10, $imieNazwisko, 0, 0, 'C');
 
-$html = '
-<h1>HTML TIPS & TRICKS</h1>
-
-<h3>REMOVE CELL PADDING</h3>
-<pre>$pdf->SetCellPadding(0);</pre>
-This is used to remove any additional vertical space inside a single cell of text.
-
-<h3>REMOVE TAG TOP AND BOTTOM MARGINS</h3>
-<pre>$tagvs = array(\'p\' => array(0 => array(\'h\' => 0, \'n\' => 0), 1 => array(\'h\' => 0, \'n\' => 0)));
-$pdf->setHtmlVSpace($tagvs);</pre>
-Since the CSS margin command is not yet implemented on TCPDF, you need to set the spacing of block tags using the following method.
-
-<h3>SET LINE HEIGHT</h3>
-<pre>$pdf->setCellHeightRatio(1.25);</pre>
-You can use the following method to fine tune the line height (the number is a percentage relative to font height).
-
-<h3>CHANGE THE PIXEL CONVERSION RATIO</h3>
-<pre>$pdf->setImageScale(0.47);</pre>
-This is used to adjust the conversion ratio between pixels and document units. Increase the value to get smaller objects.<br />
-Since you are using pixel unit, this method is important to set theright zoom factor.<br /><br />
-Suppose that you want to print a web page larger 1024 pixels to fill all the available page width.<br />
-An A4 page is larger 210mm equivalent to 8.268 inches, if you subtract 13mm (0.512") of margins for each side, the remaining space is 184mm (7.244 inches).<br />
-The default resolution for a PDF document is 300 DPI (dots per inch), so you have 7.244 * 300 = 2173.2 dots (this is the maximum number of points you can print at 300 DPI for the given width).<br />
-The conversion ratio is approximatively 1024 / 2173.2 = 0.47 px/dots<br />
-If the web page is larger 1280 pixels, on the same A4 page the conversion ratio to use is 1280 / 2173.2 = 0.59 pixels/dots';
-
-// output the HTML content
-$pdf->writeHTML($html, true, false, true, false, '');
-
-// reset pointer to the last page
-$pdf->lastPage();
-
-// ---------------------------------------------------------
-
-//Close and output PDF document
-$pdf->Output('example_061.pdf', 'I');
-
+        //podpis firmy
+        $pdf->SetXY(125,266);
+        $pdf->Cell(60, 10, "Podpis Firmy", 0, 0, 'C');
+        $pdf->Output(); 
+        $filename="agreements/test";
+        // $pdf->Output($filename.'.pdf','F');
     }
 
     /**
