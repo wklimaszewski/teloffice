@@ -15,6 +15,6 @@ deploy_staging:
   type: deploy
   script:
      #- echo "$SSH_PRIVATE_KEY"
-    - ssh -i  ~/.ssh/id_rsa wklimasz@34.66.186.192 "cd /tmp && mkdir alamakoftaa && exit"
+    - ssh -i  ~/.ssh/id_rsa wklimasz@34.66.186.192 "mkdir alamakoftaa && exit"
   only:
     - master
