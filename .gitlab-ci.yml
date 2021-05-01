@@ -11,7 +11,7 @@ before_script:
 deploy_staging:
   type: deploy
   script:
-     - echo testabc
-  #  - ssh root@34.66.186.192 "cd /tmp && mkdir alamakoftaa && exit"
+     - echo "$SSH_PRIVATE_KEY"
+   #  - ssh -i  ~/.ssh/id_rsa root@34.66.186.192 "cd /tmp && mkdir alamakoftaa && exit"
   only:
     - master
