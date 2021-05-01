@@ -1,4 +1,6 @@
-<x-app-layout>
+@extends('layouts.app')
+
+@section('content')
         <section class="page-section portfolio" id="portfolio">
             <div class="container">
                 <!-- Portfolio Grid Items-->
@@ -302,4 +304,4 @@ Clark, MO 65243</p>
         <script src="assets/mail/contact_me.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
-</x-app-layout>
+@endsection
