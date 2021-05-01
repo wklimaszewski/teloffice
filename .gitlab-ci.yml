@@ -8,6 +8,7 @@ before_script:
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+  - chmod 644 ~/.ssh/id_rsa
 
 deploy_staging:
   type: deploy
