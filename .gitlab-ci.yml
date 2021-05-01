@@ -10,6 +10,6 @@ deploy:
         - ssh-keyscan 34.66.186.192 >> ~/.ssh/known_hosts
         - chmod 644 ~/.ssh/known_hosts
     script:
-        - ssh wklimasz@34.66.186.192 "cd /var/www/html/teloffice & git pull & exit"
-    only:
+        - ssh wklimasz@34.66.186.192 "cd /var/www/html/teloffice && git checkout master && git pull origin master && exit"
+    only: 
         - master
