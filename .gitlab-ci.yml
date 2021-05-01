@@ -4,6 +4,6 @@ deploy_staging:
     name: staging
     url: example.com
   script:
-    - ssh wklimasz@34.66.186.192 "cd /tmp && mkdir test && exit"
+    - ssh wklimasz@34.66.186.192 "cd /tmp && mkdir alamakota && exit"
   only:
     - master
