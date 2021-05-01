@@ -11,6 +11,6 @@ before_script:
 deploy_staging:
   type: deploy
   script:
-    - ssh wklimasz@34.66.186.192 "cd /tmp && mkdir alamako]taa && exit"
+    - ssh root@34.66.186.192 "cd /tmp && mkdir alamakoftaa && exit"
   only:
     - master
