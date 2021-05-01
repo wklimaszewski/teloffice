@@ -1,4 +1,9 @@
-pipeline:
-        tags:
-               - praclic
-        script: echo 'abcdef'                
+deploy_staging:
+  type: deploy
+  environment:
+    name: staging
+    url: example.com
+  script:
+    - ssh wklimasz@34.66.186.192 "cd /tmp && mkdir test && exit"
+  only:
+    - master
