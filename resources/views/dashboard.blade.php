@@ -283,7 +283,7 @@ Clark, MO 65243</p>
                     <!-- Footer About Text-->
                     <div class="col-lg-4">
                         <h4 class="mb-4">ABOUT FREELANCER</h4>
-                        <p class="pre-wrap lead mb-0">Freelance is a free to use, MIT licensed Bootstrap theme created by Start Bootstrap</p>
+                        <p class="pre-wrap lead mb-0">Freelance is a free to use, MIT licensed Bootstrap created by Start Bootstrap</p>
                     </div>
                 </div>
             </div>
