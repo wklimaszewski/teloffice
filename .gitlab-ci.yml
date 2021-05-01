@@ -9,12 +9,12 @@ before_script:
   - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
   - chmod 600 ~/.ssh/id_rsa
   - chmod 700 ~/.ssh
-  - ssh-add ~/.ssh/id_rsa
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
 
 deploy_staging:
   type: deploy
   script:
      #- echo "$SSH_PRIVATE_KEY"
-    - ssh -A root@34.66.186.192 "mkdir alamakoftaa && exit"
+    - ssh root@34.66.186.192 "mkdir alamakoftaa && exit"
   only:
     - master
