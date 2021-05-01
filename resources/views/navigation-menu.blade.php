@@ -1,19 +1,17 @@
 <nav class="navbar navbar-expand-lg bg-secondary fixed-top" id="mainNav">
     <!-- Primary Navigation Menu -->
-    <a class="navbar-brand js-scroll-trigger" href="#page-top">START</a>
+    <a class="navbar-brand js-scroll-trigger" href="/dashboard"><img src="{{asset('images/logo.png') }}"></a>
+        @auth
                 <button class="navbar-toggler navbar-toggler-right font-weight-bold bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">Menu <i class="fas fa-bars"></i></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto">
+                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/ofert">OFERTA</a>
+                        </li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="/create">UMOWA</a>
                         </li>
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#about">ABOUT</a>
                         </li>
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="#contact">CONTACT</a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- Settings Dropdown -->
-                <div class="ml-3 absolute">
+                        <li class="nav-item mx-0 mx-lg-1">
                     <x-jet-dropdown align="right" width="48">
                         <x-slot name="trigger">
                                 <span class="inline-flex rounded-md">
@@ -29,7 +27,7 @@
 
                         <x-slot name="content">
                             <x-jet-dropdown-link href="{{ route('profile.show') }}">
-                                {{ __('Profile') }}
+                                {{ __('Mój profil') }}
                             </x-jet-dropdown-link>
 
                             <div class="border-t border-gray-100"></div>
@@ -41,16 +39,20 @@
                                 <x-jet-dropdown-link href="{{ route('logout') }}"
                                          onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                    {{ __('Log Out') }}
+                                    {{ __('Wyloguj') }}
                                 </x-jet-dropdown-link>
                             </form>
                         </x-slot>
                     </x-jet-dropdown>
+                        </li>
+                    </ul>
                 </div>
+                <!-- Settings Dropdown -->
+               
             </div>
         </div>
     </div>
-
+        @endauth
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <!-- Responsive Settings Options -->
@@ -65,29 +67,7 @@
                 </div>
             </div>
 
-            <div class="mt-3 space-y-1">
-                <!-- Account Management -->
-                <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
-                    {{ __('Profile') }}
-                </x-jet-responsive-nav-link>
-
-                @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                    <x-jet-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')">
-                        {{ __('API Tokens') }}
-                    </x-jet-responsive-nav-link>
-                @endif
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-jet-responsive-nav-link href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
-                                    this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-jet-responsive-nav-link>
-                </form>
-            </div>
+            
         </div>
     </div>
 </nav>

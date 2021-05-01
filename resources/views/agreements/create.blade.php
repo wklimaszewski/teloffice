@@ -1,14 +1,24 @@
-<x-app-layout>
+@extends('layouts.app')
+
+@section('content')
 <div class="container">
+    @if (session()->has('messege'))
+    <div class="alert alert-success" role="alert">
+    <strong>Udało się !</strong> {{ session()->get('messege')}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    @endif
     <h1 style="text-align:center">Wpisz swoje dane, aby utworzyć umowę</h1>
     <form action="{{ route('agreements.create') }}"  method="get">
     <div class="form-group">
         <label for="name">Imie:</label>
-        <input type="text" class="form-control" id="name" name="name" maxlength="20" pattern="[A-Za-z]" placeholder="Wpisz imie">
+        <input type="text" class="form-control" id="name" name="name" maxlength="20" placeholder="Wpisz imie">
     </div>
     <div class="form-group">
         <label for="surname">Nazwisko:</label>
-        <input type="text" class="form-control" id="surname" name="surname" maxlength="36" pattern="[A-Za-z]" placeholder="Wpisz nazwisko">
+        <input type="text" class="form-control" id="surname" name="surname" maxlength="36" placeholder="Wpisz nazwisko">
     </div>
     <div class="form-group">
         <label for="adres">Adres:</label>
@@ -39,12 +49,12 @@
         </select>
     </div>
     <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="checkbox">
-        <label class="form-check-label" for="checkbox">Wyrażam zgodę na przetwarzanie moich danych osobowych</label>
+        <input type="checkbox" class="form-check-input" id="checkbox" required>
+        <label class="form-check-label" for="checkbox">*Wyrażam zgodę na przetwarzanie moich danych osobowych</label>
     </div>
     <br>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
     </div>
     <br>
-</x-app-layout>
+@endsection
