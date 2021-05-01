@@ -1,4 +1,4 @@
 pipeline:
         tags:
-               - pracalicencjacka
-        script: echo 'abcd'                
+               - praclic
+        script: echo 'abcdef'                
