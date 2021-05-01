@@ -4,17 +4,17 @@ before_script:
   # Setup SSH deploy keys
   - 'which ssh-agent || ( apt-get install -qq openssh-client )'
   - eval $(ssh-agent -s)
-  - ssh-add <(echo "$SSH_PRIVATE_KEY")
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
   - chmod 600 ~/.ssh/id_rsa
   - chmod 700 ~/.ssh
+  - ssh-add ~/.ssh/id_rsa
 
 deploy_staging:
   type: deploy
   script:
      #- echo "$SSH_PRIVATE_KEY"
-    - ssh -i  ~/.ssh/id_rsa wklimasz@34.66.186.192 "mkdir alamakoftaa && exit"
+    - ssh -A wklimasz@34.66.186.192 "mkdir alamakoftaa && exit"
   only:
     - master
