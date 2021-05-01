@@ -1,18 +1,15 @@
-before_script:
-  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-  - mkdir -p ~/.ssh
-  - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
-  - chmod 700 ~/.ssh/id_rsa
-  - eval "$(ssh-agent -s)"
-  - ssh-add ~/.ssh/id_rsa
-  - ssh-keyscan -t rsa 34.66.186.192 > ~/.ssh/known_hosts
-  - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-  - chmod 644 ~/.ssh/known_hosts
-
-deploy_staging:
-  type: deploy
-  script:
-     #- echo "$SSH_PRIVATE_KEY"
-    - ssh root@34.66.186.192 "mkdir alamakoftaa && exit"
-  only:
-    - master
+deploy:
+    stage: deploy
+    before_script:
+        - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+        - eval $(ssh-agent -s)
+        - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+        - mkdir -p ~/.ssh
+        - chmod 700 ~/.ssh
+        - touch ~/.ssh/known_hosts
+        - ssh-keyscan 34.66.186.192 >> ~/.ssh/known_hosts
+        - chmod 644 ~/.ssh/known_hosts
+    script:
+        - ssh root@34.66.186.192 "mkdir /tmp/alamakota"
+    only:
+        - master
