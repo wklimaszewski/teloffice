@@ -120,7 +120,7 @@ class AgreementsController extends Controller
         $pdf->Cell(60, 10, "Podpis Firmy", 0, 0, 'C');
         $filename="agreements/test";
         $pdf->Output($filename.'.pdf','F');
-
+            
         return redirect('/create')->with('messege', 'Umowa 231231/05/2021 została zawarta pomyślnie!'); 
     }
 
