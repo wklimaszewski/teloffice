@@ -1,6 +1,7 @@
-@extends('layouts.guest')
+@extends('layouts.app')
 
 @section('content')
+<main style="margin-top:-140px">
     <x-jet-authentication-card>
         <x-slot name="logo">
             <img src="{{asset('images/logo.png') }}" width="80%" style="margin-left:auto; margin-right:auto">
