@@ -78,7 +78,7 @@
                                         <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                                         <div class="divider-custom-line"></div>
                                     </div>
-                                    <!-- Portfolio Modal - Image--><img class="img-fluid rounded mb-5" src="assets/img/portfolio/cabin.png"/>
+                                    <!-- Portfolio Modal - Image--><img class="img-fluid rounded mb-5" src="assets/img/portfolio/net50.png"/>
                                     <!-- Portfolio Modal - Text-->
                                     <p class="mb-5">INTERNET 50 to usługa oferująca łącze intenetowe o prędkości pobierania 50mb/s oraz prędkości wysyłania 10 mb/s. Cena pakietu - 40 zł/miesiąc.</p>
                                     <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Zamknij</button>
@@ -105,7 +105,7 @@
                                         <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                                         <div class="divider-custom-line"></div>
                                     </div>
-                                    <!-- Portfolio Modal - Image--><img class="img-fluid rounded mb-5" src="assets/img/portfolio/cake.png"/>
+                                    <!-- Portfolio Modal - Image--><img class="img-fluid rounded mb-5" src="assets/img/portfolio/net100.png"/>
                                     <!-- Portfolio Modal - Text-->
                                     <p class="mb-5">INTERNET 100 to usługa oferująca łącze intenetowe o prędkości pobierania 100mb/s oraz prędkości wysyłania 20 mb/s. Cena pakietu - 60 zł/miesiąc. </p>
                                     <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Zamknij</button>
@@ -132,7 +132,7 @@
                                         <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                                         <div class="divider-custom-line"></div>
                                     </div>
-                                    <!-- Portfolio Modal - Image--><img class="img-fluid rounded mb-5" src="assets/img/portfolio/circus.png"/>
+                                    <!-- Portfolio Modal - Image--><img class="img-fluid rounded mb-5" src="assets/img/portfolio/net500.png"/>
                                     <!-- Portfolio Modal - Text-->
                                     <p class="mb-5">INTERNET 100 to usługa oferująca łącze intenetowe o prędkości pobierania 500mb/s oraz prędkości wysyłania 100 mb/s. Cena pakietu - 80 zł/miesiąc.</p>
                                     <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Zamknij</button>
@@ -159,7 +159,7 @@
                                         <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                                         <div class="divider-custom-line"></div>
                                     </div>
-                                    <!-- Portfolio Modal - Image--><img class="img-fluid rounded mb-5" src="assets/img/portfolio/game.png"/>
+                                    <!-- Portfolio Modal - Image--><img class="img-fluid rounded mb-5" src="assets/img/portfolio/tv_fam.png"/>
                                     <!-- Portfolio Modal - Text-->
                                     <p class="mb-5">PAKIET TV FAMILIJNY oferuję pakiet kanałów telewizyjnych zawierający podstawowy zestaw kanałów dla widza w każdym wieku. Cena pakietu - 50 zł/miesiąc. </p>
                                     <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Zamknij</button>
@@ -186,7 +186,7 @@
                                         <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                                         <div class="divider-custom-line"></div>
                                     </div>
-                                    <!-- Portfolio Modal - Image--><img class="img-fluid rounded mb-5" src="assets/img/portfolio/safe.png"/>
+                                    <!-- Portfolio Modal - Image--><img class="img-fluid rounded mb-5" src="assets/img/portfolio/tv_prem.png"/>
                                     <!-- Portfolio Modal - Text-->
                                     <p class="mb-5">PAKIET TV PREMIUM oferuję pakiet kanałów telewizyjnych zawierający podstawowy zestaw kanałów dla widza w każdym wieku. Dodatkowo zestaw kanałów HBO, ELEVEN SPORT, CANAL + SPORT oraz CANAL + FILM. Cena pakietu - 100 zł/miesiąc.</p>
                                     <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Zamknij</button>
@@ -213,7 +213,7 @@
                                         <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
                                         <div class="divider-custom-line"></div>
                                     </div>
-                                    <!-- Portfolio Modal - Image--><img class="img-fluid rounded mb-5" src="assets/img/portfolio/submarine.png" alt="Submarine"/>
+                                    <!-- Portfolio Modal - Image--><img class="img-fluid rounded mb-5" src="assets/img/portfolio/tvint.png" alt="Submarine"/>
                                     <!-- Portfolio Modal - Text-->
                                     <p class="mb-5">PAKIET TV + INTERNET oferuję pakiet kanałów telewizyjnych zawierający podstawowy zestaw kanałów dla widza w każdym wieku oraz INTERNET o prędkości pobierania 100mb/s i prędkości wysyłania 20mb/scandir. Cena pakietu - 95 zł/miesiąc.</p>
                                     <button class="btn btn-primary" href="#" data-dismiss="modal"><i class="fas fa-times fa-fw"></i>Zamknij</button>
