@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,22 +15,26 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('dashboard');
+    return view('welcome');
 });
 
-Route::get('/map', [App\Http\Controllers\mapController::class, 'index'])->name('map');
+Route::get('logout', function ()
+{
+    Auth::logout();
+});
 
-Auth::routes();
+Route::get('/list', function () {
+    return view('list');
+});
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+Route::get('/dashboard', function () {
     return view('dashboard');
-})->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-Route::get('create', function(){
-    return view('agreements/create'); 
-}); 
+Route::resource('invoices', App\Http\Controllers\InvoicesController::class);
+Route::resource('companies', App\Http\Controllers\CompaniesController::class);
+Route::resource('services', App\Http\Controllers\ServicesController::class);
+Route::resource('customers', App\Http\Controllers\CustomerController::class);
 
-Route::resource('agreements', App\Http\Controllers\AgreementsController::class); 
-
+Route::get('faktura_add', 'App\Http\Controllers\InvoicesController@create_pdf');
+require __DIR__.'/auth.php';
