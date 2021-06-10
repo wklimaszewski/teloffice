@@ -18,10 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('logout', function ()
-{
-    Auth::logout();
-});
+//Route::get('logout', function ()
+//{
+//    Auth::logout();
+//});
 
 Route::get('/list', function () {
     return view('list');
