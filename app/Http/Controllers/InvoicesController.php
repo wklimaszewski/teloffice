@@ -36,25 +36,32 @@ class InvoicesController extends Controller
     public function create()
     {
         $agreements = agreement::all();
-        return view('invoices.create', ['agreements' => $agreements]);
+        $customers = customer::all();
+        $companies = company::all();
+        return view('invoices.create', compact('agreements', 'customers', 'companies'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        $invoice = new invoice();
+        $invoice = new db_invoice();
         $invoice->agreement_id = $request->agreement;
-        $invoice->number->increment;
+        $invoice->number += 1 ;
         $invoice->price = $request->price;
 
         $invoice->save();
 
-        return redirect()->route('invoices.index');
+        $agreement = agreement::where('id', $request->agreement)->first();
+        //$invoice_id, $agreement_id, $company_id, $customer_id
+        $this->create_pdf($invoice->id, $agreement->id, $agreement->company_id, $agreement->customer_id);
+
+        return redirect()->route('invoices.index')
+            ->with('success', 'Product updated successfully');
     }
 
     /**
@@ -99,7 +106,7 @@ class InvoicesController extends Controller
             ->buyer($customer)
             ->date(now()->subWeeks(3))
             ->dateFormat('m/d/Y')
-            ->payUntilDays(14)
+            ->payUntilDays(31)
             ->currencySymbol('PLN')
             ->currencyCode('PLN')
             ->currencyFormat('{VALUE}{SYMBOL}')
@@ -153,14 +160,14 @@ class InvoicesController extends Controller
         //
     }
 
-    public function create_pdf()
+    public function create_pdf($invoice_id, $agreement_id, $company_id, $customer_id)
     {
-        $invoice = db_invoice::where('id', 2)->first();
-        $agreement = agreement::where('id', $invoice->agreement_id)->first();
-        $company = company::where('id', $agreement->company_id)->first();
-        $contractor = customer::where('user_id', $agreement->user_id )->first();
+        $invoice = db_invoice::where('id', $invoice_id)->first();
+        $agreement = agreement::where('id', $agreement_id)->first();
+        $company = company::where('id', $company_id)->first();
+        $contractor = customer::where('id', $customer_id )->first();
 
-        $service_id = agreements_service::select('service_id')->where('agreement_id', $agreement->id)->get();
+        $service_id = agreements_service::select('service_id')->where('agreement_id', $agreement_id)->get();
 
         $array = array();
         foreach($service_id as $id)
@@ -196,7 +203,7 @@ class InvoicesController extends Controller
 
         foreach ($service_list as $service)
         {
-            array_push($items, (new InvoiceItem())->title($service->name)->pricePerUnit($service->cost_for_month) );
+            array_push($items, (new InvoiceItem())->title($service->name)->pricePerUnit($service->price_for_month) );
         }
 //        $items = [
 //            (new InvoiceItem())->title('Service 1')->pricePerUnit(47.79)->quantity(2)->discount(10),

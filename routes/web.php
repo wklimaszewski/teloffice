@@ -18,10 +18,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::get('logout', function ()
-//{
-//    Auth::logout();
-//});
+Route::get('logout', function ()
+{
+    Auth::logout();
+});
 
 Route::get('/list', function () {
     return view('list');
@@ -35,6 +35,7 @@ Route::resource('invoices', App\Http\Controllers\InvoicesController::class);
 Route::resource('companies', App\Http\Controllers\CompaniesController::class);
 Route::resource('services', App\Http\Controllers\ServicesController::class);
 Route::resource('customers', App\Http\Controllers\CustomerController::class);
+Route::resource('agreements', App\Http\Controllers\AgreementsController::class);
 
 Route::get('faktura_add', 'App\Http\Controllers\InvoicesController@create_pdf');
 require __DIR__.'/auth.php';

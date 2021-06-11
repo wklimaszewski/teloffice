@@ -31,8 +31,6 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ route('companies.create') }}">Dodaj</a>
                     <a class="dropdown-item" href="{{ route('companies.index') }}">Lista</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -42,8 +40,6 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="">Dodaj</a>
                     <a class="dropdown-item" href="{{ route('invoices.index') }}">Lista</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -53,8 +49,6 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ route('customers.create') }}">Dodaj</a>
                     <a class="dropdown-item" href="{{ route('customers.index') }}">Lista</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -64,8 +58,6 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="">Dodaj</a>
                     <a class="dropdown-item" href="{{ route('services.index') }}">Lista</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
         </ul>

@@ -117,7 +117,7 @@ class CompaniesController extends Controller
         ]);
         $company->update($request->all());
 
-        return redirect()->route('company.index')
+        return redirect()->route('companies.index')
             ->with('success', 'Product updated successfully');
     }
 
