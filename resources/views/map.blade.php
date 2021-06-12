@@ -97,15 +97,62 @@
 <header class="masthead bg-primary text-white text-center" >
     <h1 class="masthead-heading mb-0" >DODAJ ZGŁOSZENIE</h1>
 </header><br>
+    <h1 style="text-align: center;">Usługa</h1><br>
+    <div class="row justify-content-center">
+        <div class="col-xs-4 col-sm-4 col-md-4">
+            <div class="form-group" style="text-align: center;">
+                <strong>Wybierz usługę:</strong><br>
+                <select class="form-select" aria-label="Default select example">
+                    <option selected>Open this select menu</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <h1 style="text-align: center;">Powód</h1>
+    <div class="row justify-content-center">
+        <div class="col-xs-6 col-sm-6 col-md-6">
+            <div class="form-group">
+                <strong style="text-align: center;">Opisz powód zgłoszenia</strong>
+                <textarea class="form-control" style="height:100px" name="description" placeholder="Opis"></textarea>
+            </div>
+        </div>
+    </div>
+    <h1 style="text-align: center;">Adres</h1><br>
     <div class="row justify-content-center">
         <div id="Map" style="height: 400px; width: 60%;"></div>
     </div>
     <div>
         <div class="row">
             <div class="col-xs-4 col-sm-4 col-md-4">
+                <div class="form-group" style="text-align: center;">
+                    <strong>Wpisz adres lub zaznacz punkt na mapie:</strong><br>
+                    <label>Miejscowość:</label>
+                    <input type="text" name="miasto" id="miasto" placeholder="Podaj miasto" onkeyup="Check()"><br>
+                    <label>Ulica, numer domu:</label>
+                    <input type="text" name="ulica" id="ulica" placeholder="Podaj ulicę" onkeyup="Check()"><br>
+                    <label>Kod pocztowy(opcjonalnie):</label>
+                    <input type="text" name="kod_pocztowy" id="kod_pocztowy" placeholder="Podaj kod pocztowy" onkeyup="Check()"><br>
+                    <input type="submit" onclick="szukaj()" value="ZAZNACZ">
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4">
                 <div class="form-group">
-                    <strong>Nazwa:</strong>
-                    <input type="text" name="name" class="form-control" placeholder="Nazwa">
+                    <div class="row justify-content-center">
+                        <br><br><input type="button" value="ZLOKALIZUJ MNIE" name="Lokalizuj" onclick="namierz()" />
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4">
+                <div class="form-group">
+                    <div class="row justify-content-center">
+                        <strong>Znaleziony adres:</strong>
+                        <div id="pokaz"></div>
+                        <label id="kordy"></label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -144,6 +191,25 @@
         map.setCenter(ol.proj.transform([lon, lat], 'EPSG:4326', 'EPSG:3857'),15);
     }
 
+    function uzupelnij(wynik)
+    {
+        if(typeof wynik.city !== 'undefined')
+        {
+            document.getElementById("miasto").value = wynik.city;
+            if(typeof wynik.road !== 'undefined' && typeof wynik.house_number !== 'undefined')
+                document.getElementById("ulica").value = wynik.road+" "+wynik.house_number;
+        }
+        else
+        {
+            document.getElementById("miasto").value = wynik.village;
+            if(typeof wynik.house_number !== 'undefined')
+                document.getElementById("ulica").value = wynik.house_number;
+        }
+
+
+        document.getElementById("kod_pocztowy").value = wynik.postcode;
+    }
+
     function namierz()
     {
         var lok = navigator.geolocation;
@@ -158,20 +224,10 @@
                     url: "https://nominatim.openstreetmap.org/reverse?lon="+location.coords.longitude+"&lat="+location.coords.latitude+"&format=json&addressdetails=1",
                     success: function(result)
                     {
+                        console.log(result);
                         if(result!=0)
                         {
-                            if(result.address.house_number != null)
-                            {
-                                document.getElementById("pokaz").innerHTML = "<label>Znaleziony adres:</label><br>"+result.display_name+"<br><label>lon&lat:</label><br>lon: "
-                                    +result.lon+"<br>lat: "+result.lat+"<br><button>POTWIERDŹ</button><br><p>Znaleziono budynek + (opcjonalnie informacja w jakiej odległości)</p>";
-
-                            }
-                            else
-                            {
-                                document.getElementById("pokaz").innerHTML = "<label>Znaleziony adres:</label><br>"+result.display_name+"<br><label>lon&lat:</label><br>lon: "
-                                    +result.lon+"<br>lat: "+result.lat+"<br><button>POTWIERDŹ</button><br>";
-
-                            }
+                            uzupelnij(result.address);
                         }
                     },
                     error: function()
@@ -222,7 +278,7 @@
 
     function Check()
     {
-        if(document.getElementById('miasto').value.length %4!=0){
+        if(document.getElementById('miasto').value.length > 3){
             // podpowiedz_miasto();
             document.getElementById("ulica").disabled = false;
         }
@@ -241,6 +297,7 @@
                 url: "https://nominatim.openstreetmap.org/reverse?lon="+coord.lon+"&lat="+coord.lat+"&format=json",
                 success: function(result)
                 {
+                    console.log(result);
                     if(result!=0)
                     {
                         var min = zmierz(coord.lat,coord.lon,result.lat,result.lon);
@@ -273,6 +330,7 @@
                                 var pos       = new OpenLayers.LonLat(coord.lon, coord.lat).transform( fromProjection, toProjection);
                                 markers.addMarker(new OpenLayers.Marker(pos));
                             }
+                            uzupelnij(result.address);
                             document.getElementById("pokaz").innerHTML = "<label>Znaleziony adres:</label><br>"+result.display_name+"<br>lon: "
                                 +result.lon+"<br>lat: "+result.lat+"<br><button>POTWIERDŹ</button><br>";
                         }
