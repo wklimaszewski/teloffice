@@ -70,6 +70,8 @@ class NotificationsController extends Controller
         $notification->address = $request->miasto." ".$request->ulica." ".$request->kod_pocztowy;
 
         $notification->save();
+
+        return view('notifications.index'); 
     }
 
     /**
