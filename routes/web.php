@@ -40,6 +40,7 @@ Route::resource('companies', App\Http\Controllers\CompaniesController::class);
 Route::resource('services', App\Http\Controllers\ServicesController::class);
 Route::resource('customers', App\Http\Controllers\CustomerController::class);
 Route::resource('agreements', App\Http\Controllers\AgreementsController::class);
+Route::resource('notifications', App\Http\Controllers\NotificationsController::class);
 
 Route::get('faktura_add', 'App\Http\Controllers\InvoicesController@create_pdf');
 require __DIR__.'/auth.php';

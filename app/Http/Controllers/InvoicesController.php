@@ -72,58 +72,7 @@ class InvoicesController extends Controller
      */
     public function show($id)
     {
-        $client = new Party([
-            'name'          => 'Firma_1',
-            'phone'         => '231589486',
-        ]);
 
-        $customer = new Party([
-            'name'          => 'Wojciech Klimaszewski',
-            'address'       => 'Jakiś adresik',
-            'custom_fields' => [
-                'order number' => '> 654321 <',
-            ],
-        ]);
-
-        $items = [
-            (new InvoiceItem())->title('Service 1')->pricePerUnit(47.79)->quantity(2)->discount(10),
-            (new InvoiceItem())->title('Service 2')->pricePerUnit(71.96)->quantity(2),
-            (new InvoiceItem())->title('Service 3')->pricePerUnit(4.56),
-            (new InvoiceItem())->title('Service 4')->pricePerUnit(87.51)->quantity(7)->discount(4),
-            (new InvoiceItem())->title('Service 5')->pricePerUnit(71.09)->quantity(7)->discountByPercent(9),
-        ];
-
-        $notes = [
-            'Faktura została wygenerowana za pośrednictwem TELOFFICE',
-        ];
-        $notes = implode("<br>", $notes);
-
-        $invoice = Invoice::make('FAKTURA')
-            ->series('BIG')
-            ->sequence(667)
-            ->serialNumberFormat('{SEQUENCE}/{SERIES}')
-            ->seller($client)
-            ->buyer($customer)
-            ->date(now()->subWeeks(3))
-            ->dateFormat('m/d/Y')
-            ->payUntilDays(31)
-            ->currencySymbol('PLN')
-            ->currencyCode('PLN')
-            ->currencyFormat('{VALUE}{SYMBOL}')
-            ->currencyThousandsSeparator('.')
-            ->currencyDecimalPoint(',')
-            ->filename($client->name . ' ' . $customer->name)
-            ->addItems($items)
-            ->notes($notes)
-            ->logo(public_path('images/logo.png'))
-            // You can additionally save generated invoice to configured disk
-            ->save('public');
-
-        $link = $invoice->url();
-        // Then send email to party with link
-
-        // And return invoice itself to browser or have a different view
-        return $invoice->stream();
     }
 
     /**

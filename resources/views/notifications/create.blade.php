@@ -29,11 +29,11 @@
             width: 100%;
         }
 
-        input[type=submit] {
-            background-color: DodgerBlue;
-            color: #fff;
-            cursor: pointer;
-        }
+        /*input[type=submit] {*/
+        /*    background-color: DodgerBlue;*/
+        /*    color: #fff;*/
+        /*    cursor: pointer;*/
+        /*}*/
 
         .autocomplete-items {
             position: absolute;
@@ -98,65 +98,74 @@
     <h1 class="masthead-heading mb-0" >DODAJ ZGŁOSZENIE</h1>
 </header><br>
     <h1 style="text-align: center;">Usługa</h1><br>
-    <div class="row justify-content-center">
-        <div class="col-xs-4 col-sm-4 col-md-4">
-            <div class="form-group" style="text-align: center;">
-                <strong>Wybierz usługę:</strong><br>
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    <h1 style="text-align: center;">Powód</h1>
-    <div class="row justify-content-center">
-        <div class="col-xs-6 col-sm-6 col-md-6">
-            <div class="form-group">
-                <strong style="text-align: center;">Opisz powód zgłoszenia</strong>
-                <textarea class="form-control" style="height:100px" name="description" placeholder="Opis"></textarea>
-            </div>
-        </div>
-    </div>
-    <h1 style="text-align: center;">Adres</h1><br>
-    <div class="row justify-content-center">
-        <div id="Map" style="height: 400px; width: 60%;"></div>
-    </div>
-    <div>
-        <div class="row">
+    <form action="{{ route('notifications.store') }}" method="post" enctype="multipart/form-data">
+        @csrf
+        <div class="row justify-content-center">
             <div class="col-xs-4 col-sm-4 col-md-4">
                 <div class="form-group" style="text-align: center;">
-                    <strong>Wpisz adres lub zaznacz punkt na mapie:</strong><br>
-                    <label>Miejscowość:</label>
-                    <input type="text" name="miasto" id="miasto" placeholder="Podaj miasto" onkeyup="Check()"><br>
-                    <label>Ulica, numer domu:</label>
-                    <input type="text" name="ulica" id="ulica" placeholder="Podaj ulicę" onkeyup="Check()"><br>
-                    <label>Kod pocztowy(opcjonalnie):</label>
-                    <input type="text" name="kod_pocztowy" id="kod_pocztowy" placeholder="Podaj kod pocztowy" onkeyup="Check()"><br>
-                    <input type="submit" onclick="szukaj()" value="ZAZNACZ">
-                </div>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4">
-                <div class="form-group">
-                    <div class="row justify-content-center">
-                        <br><br><input type="button" value="ZLOKALIZUJ MNIE" name="Lokalizuj" onclick="namierz()" />
-                    </div>
-
-                </div>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-4">
-                <div class="form-group">
-                    <div class="row justify-content-center">
-                        <strong>Znaleziony adres:</strong>
-                        <div id="pokaz"></div>
-                        <label id="kordy"></label>
-                    </div>
+                    <strong>Wybierz usługę:</strong><br>
+                    <select class="form-select" name="service_id">
+                        <option value="0" disabled>Wybierz usługę</option>
+                        @foreach($services as $service)
+                            <option value="{{ $service->id }}">{{ $service->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
         </div>
-    </div>
+        <h1 style="text-align: center;">Powód</h1>
+        <div class="row justify-content-center">
+            <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="form-group">
+                    <strong style="text-align: center;">Opisz powód zgłoszenia</strong>
+                    <textarea class="form-control" style="height:100px" name="description" placeholder="Opis"></textarea>
+                </div>
+            </div>
+        </div>
+        <h1 style="text-align: center;">Adres</h1><br>
+        <div class="row justify-content-center">
+            <div id="Map" style="height: 400px; width: 60%;"></div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    <div class="form-group" style="text-align: center;">
+                        <strong>Wpisz adres lub zaznacz punkt na mapie:</strong><br>
+                        <label>Miejscowość:</label>
+                        <input type="text" name="miasto" id="miasto" placeholder="Podaj miasto" onkeyup="Check()"><br>
+                        <label>Ulica, numer domu:</label>
+                        <input type="text" name="ulica" id="ulica" placeholder="Podaj ulicę" onkeyup="Check()"><br>
+                        <label>Kod pocztowy(opcjonalnie):</label>
+                        <input type="text" name="kod_pocztowy" id="kod_pocztowy" placeholder="Podaj kod pocztowy" onkeyup="Check()"><br>
+                        <input type="submit" class="btn btn-dark" onclick="szukaj()" value="ZAZNACZ">
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    <div class="form-group" style="margin: 20px">
+                        <div class="row justify-content-center">
+                            <input type="button" class="btn btn-secondary" value="ZLOKALIZUJ MNIE" name="Lokalizuj" onclick="namierz()" />
+                        </div>
+                        <div class="row justify-content-center" style="margin: 20px">
+                            <input type="button" class="btn btn-secondary" value="USUŃ ZNACZNIK" onclick="usunZnacznik()" />
+                        </div>
+
+                    </div>
+                </div>
+{{--            <div class="col-xs-4 col-sm-4 col-md-4">--}}
+{{--                <div class="form-group">--}}
+{{--                    <div class="row justify-content-center">--}}
+{{--                        <strong>Znaleziony adres:</strong>--}}
+{{--                        <div id="pokaz"></div>--}}
+{{--                        <label id="kordy"></label>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+                <br><br>
+                <input type="submit" class="btn btn-success" value="WYŚLIJ ZGŁOSZENIE" style="width: 60%; margin-left: auto; margin-right: auto">
+            </div>
+        </div>
+
+    </form>
 
 <script src="js/OpenLayers-2.13.1/OpenLayers.js"></script>
 <script>
@@ -201,9 +210,29 @@
         }
         else
         {
-            document.getElementById("miasto").value = wynik.village;
-            if(typeof wynik.house_number !== 'undefined')
-                document.getElementById("ulica").value = wynik.house_number;
+            if(typeof wynik.village !== 'undefined')
+            {
+                document.getElementById("miasto").value = wynik.village;
+                if(typeof wynik.road !== 'undefined' && typeof wynik.house_number !== 'undefined')
+                    document.getElementById("ulica").value = wynik.road+" "+wynik.house_number;
+                else if (typeof wynik.house_number !== 'undefined')
+                {
+                    document.getElementById("ulica").value = wynik.house_number;
+                }
+            }
+            else
+            {
+                document.getElementById("miasto").value = wynik.town;
+                if(typeof wynik.road !== 'undefined' && typeof wynik.house_number !== 'undefined')
+                {
+                    document.getElementById("ulica").value = wynik.road+" "+wynik.house_number;
+                }
+                else if (typeof wynik.house_number !== 'undefined')
+                {
+                    document.getElementById("ulica").value = wynik.house_number;
+                }
+            }
+
         }
 
 
@@ -268,8 +297,9 @@
                         var pos = new OpenLayers.LonLat(result[0].lon, result[0].lat).transform( fromProjection, toProjection);
                         markers.addMarker(new OpenLayers.Marker(pos));
                         CenterMap(result[0].lon, result[0].lat);
-                        document.getElementById("pokaz").innerHTML = "<label>Znaleziony adres:</label><br>"+result[0].display_name+"<br><label>lon&lat:</label><br>lon: "
-                            +result[0].lon+"<br>lat: "+result[0].lat+"<br><button>POTWIERDŹ</button><br>";
+                        // uzupelnij(result[0].address);
+                        // document.getElementById("pokaz").innerHTML = "<label>Znaleziony adres:</label><br>"+result[0].display_name+"<br><label>lon&lat:</label><br>lon: "
+                        //     +result[0].lon+"<br>lat: "+result[0].lat+"<br><button>POTWIERDŹ</button><br>";
                     }
                 }
             }
@@ -297,7 +327,7 @@
                 url: "https://nominatim.openstreetmap.org/reverse?lon="+coord.lon+"&lat="+coord.lat+"&format=json",
                 success: function(result)
                 {
-                    console.log(result);
+                    // console.log(result);
                     if(result!=0)
                     {
                         var min = zmierz(coord.lat,coord.lon,result.lat,result.lon);
@@ -306,38 +336,17 @@
                         var najmniej;
                         if(result.address.house_number != null)
                         {
-                            if(min>jeden)
-                            {
-                                min = jeden;
-                                if(min>dwa)
-                                    najmniej=dwa;
-                                else
-                                    najmniej=min;
-                            }
-                            else
-                            {
-                                if(min>dwa)
-                                    najmniej=dwa;
-                                else
-                                    najmniej=min;
-                            }
-                            if(najmniej<101){
-                                var pos       = new OpenLayers.LonLat(result.lon, result.lat).transform( fromProjection, toProjection);
-                                markers.addMarker(new OpenLayers.Marker(pos));
-                            }
-                            else
-                            {
-                                var pos       = new OpenLayers.LonLat(coord.lon, coord.lat).transform( fromProjection, toProjection);
-                                markers.addMarker(new OpenLayers.Marker(pos));
-                            }
+                            var pos       = new OpenLayers.LonLat(result.lon, result.lat).transform( fromProjection, toProjection);
+                            markers.addMarker(new OpenLayers.Marker(pos));
                             uzupelnij(result.address);
-                            document.getElementById("pokaz").innerHTML = "<label>Znaleziony adres:</label><br>"+result.display_name+"<br>lon: "
-                                +result.lon+"<br>lat: "+result.lat+"<br><button>POTWIERDŹ</button><br>";
+                            // document.getElementById("pokaz").innerHTML = "<label>Znaleziony adres:</label><br>"+result.display_name+"<br>lon: "
+                            //     +result.lon+"<br>lat: "+result.lat+"<br><button>POTWIERDŹ</button><br>";
                         }
                         else
                         {
-                            document.getElementById("pokaz").innerHTML = "<label>Znaleziony adres:</label><br>"+result.display_name+"<br><label>lon&lat:</label><br>lon: "
-                                +result.lon+"<br>lat: "+result.lat+"<br><button>POTWIERDŹ</button><br>";
+                            uzupelnij(result.address);
+                            // document.getElementById("pokaz").innerHTML = "<label>Znaleziony adres:</label><br>"+result.display_name+"<br><label>lon&lat:</label><br>lon: "
+                            //     +result.lon+"<br>lat: "+result.lat+"<br><button>POTWIERDŹ</button><br>";
                             var pos       = new OpenLayers.LonLat(coord.lon, coord.lat).transform( fromProjection, toProjection);
                             markers.addMarker(new OpenLayers.Marker(pos));
                         }
@@ -360,6 +369,9 @@
     function usunZnacznik()
     {
         markers.clearMarkers();
+        document.getElementById("miasto").value = "";
+        document.getElementById("ulica").value = "";
+        document.getElementById("kod_pocztowy").value = "";
     }
 
     function zmierz(lat1, lon1, lat2, lon2)
