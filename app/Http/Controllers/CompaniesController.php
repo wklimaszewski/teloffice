@@ -66,11 +66,9 @@ class CompaniesController extends Controller
                 $logo = $request->file('logo')->getClientOriginalName();
                 $request->file('logo')->storeAs('logos', "logo_".$company->id.'.png','');
             }
+
         }
-        else
-        {
-            return view('dashboard');
-        }
+        return view('dashboard');
     }
 
     /**

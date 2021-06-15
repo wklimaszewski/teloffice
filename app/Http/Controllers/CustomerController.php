@@ -52,14 +52,7 @@ class CustomerController extends Controller
             $request->request->add(['user_id' => Auth::user()->id]);
             customer::create($request->all());
         }
-        else
-        {
-            //
-        }
-
-
-//        return redirect()->route('.index')
-//            ->with('success', 'Project created successfully.');
+        return view('dashboard');
     }
 
     /**
