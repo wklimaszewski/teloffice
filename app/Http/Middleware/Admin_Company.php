@@ -16,10 +16,10 @@ class Admin_Company
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user()->role == 1 or auth()->user()->role = 2) {
+        if (auth()->user()->role == 1 or auth()->user()->role == 2) {
             return $next($request);
         }
-		
+
         return response()->json('Brak uprawnień do przeglądania strony');
     }
 }

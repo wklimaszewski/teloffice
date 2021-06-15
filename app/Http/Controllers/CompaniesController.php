@@ -17,6 +17,7 @@ class CompaniesController extends Controller
      */
     public function index()
     {
+        dd(auth()->user()->role);
         $companies = DB::table('companies')
             ->join('areas' , 'companies.area_id' , '=','areas.id')
              ->select ('companies.id', 'companies.name', 'companies.address','companies.description', 'companies.phone', 'companies.email',
