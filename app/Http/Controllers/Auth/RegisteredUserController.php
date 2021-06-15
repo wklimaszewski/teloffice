@@ -51,7 +51,21 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+		
+		$role = Auth::user()->role; 
+		switch ($role) {
+			case 2:
+				return redirect('/companies/create');
+			break;
+			case 3:
+				return redirect('/customers/create');
+			break; 
 
-        return redirect(RouteServiceProvider::HOME);
+			default:
+				return '/dashboard'; 
+			break;
+		}
+
+       // return redirect(RouteServiceProvider::HOME);
     }
 }

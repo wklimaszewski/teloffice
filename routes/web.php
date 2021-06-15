@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\Admin;
+use App\Http\Middleware\Customer;
+use App\Http\Middleware\Company;
+use App\Http\Middleware\Admin_Company;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +40,14 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::resource('invoices', App\Http\Controllers\InvoicesController::class);
-Route::resource('companies', App\Http\Controllers\CompaniesController::class);
+
+Route::middleware([Admin_Company::class])->group(function(){
+	Route::resource('companies', App\Http\Controllers\CompaniesController::class);
+});
+//Route::middleware([Company::class])->group(function(){
+	//Route::resource('companies', App\Http\Controllers\CompaniesController::class);
+//});
+
 Route::resource('services', App\Http\Controllers\ServicesController::class);
 Route::resource('customers', App\Http\Controllers\CustomerController::class);
 Route::resource('agreements', App\Http\Controllers\AgreementsController::class);
