@@ -17,7 +17,6 @@ class CompaniesController extends Controller
      */
     public function index()
     {
-        dd(auth()->user()->role);
         $companies = DB::table('companies')
             ->join('areas' , 'companies.area_id' , '=','areas.id')
              ->select ('companies.id', 'companies.name', 'companies.address','companies.description', 'companies.phone', 'companies.email',
@@ -65,9 +64,8 @@ class CompaniesController extends Controller
             if($request->hasFile('logo'))
             {
                 $logo = $request->file('logo')->getClientOriginalName();
-                $request->file('logo')->storeAs('logos', "logo_".$company->id.'.png','');
+                $request->file('logo')->storeAs('public/logos', "logo_".$company->id.'.png','');
             }
-
         }
         return view('dashboard');
     }

@@ -8,7 +8,7 @@
 </head>
 <body style="font-size: 12px">
     <h1 style="text-align: center">Umowa nr. {{ $data["agreement_number"] }}</h1>
-    <div id="left" style="width: 50%; float: left">
+    <div id="left" style="width: 100%; float: left">
         <h6 style="text-align: left"> Umowa abonencka zawarta pomiędzy:</h6><br>
         <strong>DOSTAWCĄ USŁUG:</strong><br>
         Nazwa firmy - {{ $data["company_name"] }} <br>
@@ -34,7 +34,7 @@
         @endforeach
         Abonentowi <strong>{{ $data["customer_name"] }}</strong> przez okres {{ $data["agreement_duration"] }} miesięcy. Ponadto
         Dostawca zobowiązuje się do pomocy technicznej dostępnej od poniedziałku do piątku w godzinach 6:00-22:00. Abonent zobowiązuje się
-        dokonywać płatności określonych przez dostawcę w wyznaczonym terminie. W przypadku zwlekania z płatnością Dostawca ma prawo do
+        dokonywać płatności określonych przez dostawcę terminach. W przypadku zwlekania z płatnością Dostawca ma prawo do
         podjęcia działań cywilno-prawnych w celu uzyskania należytej zapłaty za świadczone usługi. <br><br><br>
         <p style="font-size: 10px">Abonent podpisując umowę wyraża zgodę na przetwarzanie danych osobowych oraz otrzymywanie materiałów marketingowych Dostawcy.</p> <br><br><br>
     </div>

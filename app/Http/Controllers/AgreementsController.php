@@ -30,7 +30,7 @@ class AgreementsController extends Controller
      */
     public function create()
     {
-
+        return view('agreements.create');
     }
 
     /**
@@ -89,8 +89,9 @@ class AgreementsController extends Controller
         //
     }
 
-    public function create_pdf($id)
+    public function create_pdf()
     {
+        $id=1;
         $pdf = \App::make('dompdf.wrapper');
 
         $agreement = agreement::where('id', $id)->first();

@@ -1,4 +1,5 @@
-<x-app-layout>
+@extends('layouts.admin')
+@section('content')
     <script>
         $(document).ready(function() {
             $('#table').DataTable( {
@@ -8,12 +9,13 @@
             } );
         } );
     </script>
-    <header class="masthead bg-primary text-white text-center">
+    <header class="masthead bg-primary text-white text-center" style="padding: 50px">
         <h1 class="masthead-heading mb-0">LISTA FAKTUR</h1>
     </header>
-    <section class="page-section portfolio" id="portfolio">
+    <section class="masthead page-section portfolio" id="portfolio">
         <div class="container">
             <div class="row justify-content-center">
+
                 <table class="table table-bordered" id="table">
                     <thead>
                     <tr>
@@ -56,4 +58,4 @@
         </div>
     </section>
 
-</x-app-layout>
+@endsection

@@ -1,15 +1,10 @@
 <x-app-layout>
-    <header class="masthead bg-primary text-white text-center">
+    <header class="masthead bg-primary text-white text-center" >
         <h1 class="masthead-heading mb-0">UZUPEŁNIJ INFORMACJE</h1>
     </header>
     <section class="page-section portfolio" id="portfolio">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="row">
-                    <div class="col-lg-12 margin-tb">
-
-                    </div>
-                </div>
 
                 @if ($errors->any())
                     <div class="alert alert-danger">

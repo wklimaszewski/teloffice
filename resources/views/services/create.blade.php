@@ -1,5 +1,6 @@
-<x-app-layout>
-    <header class="masthead bg-primary text-white text-center">
+@extends('layouts.admin')
+@section('content')
+    <header class="masthead bg-primary text-white text-center" style="padding: 50px">
         <h1 class="masthead-heading mb-0">DODAJ USŁUGĘ</h1>
     </header>
     <section class="page-section portfolio" id="portfolio">
@@ -74,4 +75,4 @@
             </div>
         </div>
     </section>
-</x-app-layout>
+@endsection
