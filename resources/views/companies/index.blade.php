@@ -11,12 +11,12 @@
     <header class="masthead bg-primary text-white text-center">
         <h1 class="masthead-heading mb-0">LISTA FIRM</h1>
     </header>
-    <section class="page-section portfolio" id="portfolio">
+    <section class="page-section portfolio">
         <div class="container">
             <div class="row justify-content-center">
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success">
-                        <p></p>
+                        <p>{{ $message }}</p>
                     </div>
                 @endif
                 <table class="table table-bordered" id="company">

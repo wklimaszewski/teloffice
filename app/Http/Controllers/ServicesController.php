@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\company;
 use App\Models\service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ServicesController extends Controller
 {
@@ -14,7 +16,10 @@ class ServicesController extends Controller
      */
     public function index()
     {
-        $services = service::all();
+        $services = DB::table('services')
+            ->join('companies', 'services.company_id', '=', 'companies.id')
+            ->select('services.*', 'companies.name as company')
+            ->get();
         return  view('services.index', compact('services'));
     }
 
@@ -25,7 +30,8 @@ class ServicesController extends Controller
      */
     public function create()
     {
-        //
+        $companies = company::all();
+        return view('services.create', compact('companies'));
     }
 
     /**
@@ -36,7 +42,17 @@ class ServicesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'max:70'],
+            'company_id' => 'required',
+            'description' => ['required', 'max:250'],
+            'start_price' => 'required|numeric',
+            'price_for_month' => 'required',
+        ]);
+
+        service::create($request->all());
+
+        return redirect()->route('services.index')->with('success', 'Pomyślnie dodano usługę');
     }
 
     /**

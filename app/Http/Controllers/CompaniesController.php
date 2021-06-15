@@ -64,7 +64,7 @@ class CompaniesController extends Controller
             if($request->hasFile('logo'))
             {
                 $logo = $request->file('logo')->getClientOriginalName();
-                $request->file('logo')->storeAs('logos', "logo_".$company->id.'.'.$request->file('logo')->getClientOriginalExtension(),'');
+                $request->file('logo')->storeAs('logos', "logo_".$company->id.'.png','');
             }
         }
         else
