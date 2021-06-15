@@ -38,7 +38,7 @@
                     Faktury
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="">Dodaj</a>
+                    <a class="dropdown-item" href="{{ route('invoices.create') }}">Dodaj</a>
                     <a class="dropdown-item" href="{{ route('invoices.index') }}">Lista</a>
                 </div>
             </li>
@@ -56,8 +56,17 @@
                     Usługi
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="">Dodaj</a>
+                    <a class="dropdown-item" href="{{ route('services.create') }}">Dodaj</a>
                     <a class="dropdown-item" href="{{ route('services.index') }}">Lista</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Umowy
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ route('agreements.create') }}">Dodaj</a>
+                    <a class="dropdown-item" href="{{ route('agreements.index') }}">Lista</a>
                 </div>
             </li>
         </ul>
