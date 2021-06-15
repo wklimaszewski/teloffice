@@ -1,11 +1,20 @@
 <x-app-layout>
+    <script>
+        $(document).ready(function() {
+            $('#table').DataTable( {
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.25/i18n/Polish.json'
+                }
+            } );
+        } );
+    </script>
     <header class="masthead bg-primary text-white text-center">
         <h1 class="masthead-heading mb-0">LISTA FAKTUR</h1>
     </header>
     <section class="page-section portfolio" id="portfolio">
         <div class="container">
             <div class="row justify-content-center">
-                <table class="table table-bordered">
+                <table class="table table-bordered" id="table">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
