@@ -8,13 +8,12 @@
                 <form action="{{ route('invoices.store') }}" method="post">
                     @csrf
                     <div class="form-group">
-                        <label for="agreement">Wpisz numer umowy</label>
-                        <input list="agreements_list" type="text" value="" class="form-control" id="agreement" name="agreement" placeholder="Wybierz umowę">
-                        <datalist id="agreements_list">
+                        <label for="agreement">Wybierz numer umowy</label>
+                        <select class="form-control" name="agreement">
                             @foreach($agreements as $agreement)
                                 <option value="{{$agreement->id}}">{{$agreement->number}}</option>
                             @endforeach
-                        </datalist>
+                        </select>
                     </div>
 {{--                    <div class="form-group">--}}
 {{--                        <label for="customer">Klient</label>--}}

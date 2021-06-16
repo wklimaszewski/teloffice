@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use LaravelDaily\Invoices\Invoice;
 use LaravelDaily\Invoices\Classes\Party;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
+use Illuminate\Support\Facades\DB;
 
 class InvoicesController extends Controller
 {
@@ -24,7 +25,19 @@ class InvoicesController extends Controller
      */
     public function index()
     {
-        $invoices = db_invoice::all();
+        if(auth()->user()->role==1)
+            $invoices = db_invoice::all();
+        elseif (auth()->user()->role==2)
+        {
+            $invoices = Db::table('db_invoices')
+                ->join('agreements', 'db_invoices.agreement_id','=','agreements.id')
+                ->join('companies', 'agreements.company_id', '=', 'companies.id')
+                ->join('users', 'companies.user_id','=','users.id')
+                ->select('db_invoices.*')
+                ->where('users.id','=',auth()->user()->id)
+                ->get();
+        }
+
         return view('invoices.index', compact('invoices'));
     }
 
@@ -35,10 +48,17 @@ class InvoicesController extends Controller
      */
     public function create()
     {
-        $agreements = agreement::all();
-        $customers = customer::all();
-        $companies = company::all();
-        return view('invoices.create', compact('agreements', 'customers', 'companies'));
+        if(auth()->user()->role==1)
+            $agreements = agreement::all();
+        else if(auth()->user()->role==2)
+        {
+            $company = company::where('user_id', auth()->user()->id)->first();
+            $agreements = agreement::where('company_id',$company->id )->get();
+        }
+
+
+
+        return view('invoices.create', compact('agreements'));
     }
 
     /**
@@ -51,8 +71,8 @@ class InvoicesController extends Controller
     {
         $invoice = new db_invoice();
         $invoice->agreement_id = $request->agreement;
-        $invoice->number += 1 ;
-        $invoice->price = $request->price;
+        $invoice->number = rand(1000000,9999999);
+        $invoice->price = (float) $request->price;
 
         $invoice->save();
 
@@ -125,7 +145,6 @@ class InvoicesController extends Controller
         }
 
         $service_list = service::whereIn('id', $array)->get();
-//        dd($service_list);
 
         $client = new Party([
             'name' => $company->name,
@@ -154,13 +173,6 @@ class InvoicesController extends Controller
         {
             array_push($items, (new InvoiceItem())->title($service->name)->pricePerUnit($service->price_for_month) );
         }
-//        $items = [
-//            (new InvoiceItem())->title('Service 1')->pricePerUnit(47.79)->quantity(2)->discount(10),
-//            (new InvoiceItem())->title('Service 2')->pricePerUnit(71.96)->quantity(2),
-//            (new InvoiceItem())->title('Service 3')->pricePerUnit(4.56),
-//            (new InvoiceItem())->title('Service 4')->pricePerUnit(87.51)->quantity(7)->discount(4),
-//            (new InvoiceItem())->title('Service 5')->pricePerUnit(71.09)->quantity(7)->discountByPercent(9),
-//        ];
 
         $notes = [
             'Faktura została wygenerowana za pośrednictwem TELOFFICE',
@@ -169,24 +181,24 @@ class InvoicesController extends Controller
 
         $invoice = Invoice::make('FAKTURA')
             ->series('BIG')
-            ->sequence(667)
-            ->serialNumberFormat('{SEQUENCE}/{SERIES}')
+            ->sequence($invoice->number)
+            ->serialNumberFormat('FAKTURA/{SEQUENCE}')
             ->seller($client)
             ->buyer($customer)
-            ->date(now()->subWeeks(3))
-            ->dateFormat('m/d/Y')
+            ->date(now())
+            ->dateFormat('d/m/Y')
             ->payUntilDays(14)
             ->currencySymbol('PLN')
             ->currencyCode('PLN')
             ->currencyFormat('{VALUE}{SYMBOL}')
             ->currencyThousandsSeparator('.')
             ->currencyDecimalPoint(',')
-            ->filename($client->name . ' ' . $customer->name)
+            ->filename($invoice->id)
             ->addItems($items)
             ->notes($notes)
             ->logo(public_path('images/logo.png'))
             // You can additionally save generated invoice to configured disk
-            ->save('public');
+            ->save('invoices');
 
         $link = $invoice->url();
         // Then send email to party with link

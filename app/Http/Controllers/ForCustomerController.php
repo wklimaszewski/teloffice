@@ -18,7 +18,10 @@ class ForCustomerController extends Controller
         {
             if($request->area_id!=0)
             {
-                $companies = company::where('name','LIKE', '%'.$request->name.'%')->where('area_id','=', $request->area_id)->get();
+                if($request->area_id==17)
+                    $companies= company::all();
+                else
+                    $companies = company::where('name','LIKE', '%'.$request->name.'%')->where('area_id','=', $request->area_id)->get();
             }
             else
             {
@@ -27,10 +30,19 @@ class ForCustomerController extends Controller
         }
         else if($request->area_id!=0)
         {
-            $companies = company::where('area_id','=', $request->area_id)->get();
+            if($request->area_id==17)
+                $companies= company::all();
+            else
+                $companies = company::where('area_id','=', $request->area_id)->get();
         }
 
         return view('user/companies', compact('companies', 'areas'));
     }
+    public function show_agreements()
+    {
+
+    }
+
+
 
 }

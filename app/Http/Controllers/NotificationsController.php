@@ -20,29 +20,30 @@ class NotificationsController extends Controller
      */
     public function index()
     {
-        $customer_id = customer::where('id', Auth::user()->id)->first();
+//        $customer_id = customer::where('user_id', Auth::user()->id)->first();
+//
+//        $agreement_id = agreement::where('customer_id', $customer_id->id)->get();
+//
+//        $array = array();
+//
+//        foreach ($agreement_id as $a)
+//        {
+//            array_push($array, $a->id);
+//        }
+//
+//        $services_id = agreements_service::whereIn('agreement_id', $array )->get();
+//
+//        $array2 = array();
+//
+//        foreach ($services_id as $s)
+//        {
+//            array_push($array2, $s->id);
+//        }
+////        dd($array2);
+//        $services = service::whereIn('id', $array2)->get();
 
-        $agreement_id = agreement::where('customer_id', $customer_id->id)->get();
-
-        $array = array();
-
-        foreach ($agreement_id as $a)
-        {
-            array_push($array, $a->id);
-        }
-
-        $services_id = agreements_service::whereIn('agreement_id', $array )->get();
-
-        $array2 = array();
-
-        foreach ($services_id as $s)
-        {
-            array_push($array2, $s->id);
-        }
-//        dd($array2);
-        $services = service::whereIn('id', $array2)->get();
-
-        return view('notifications.index', compact('services'));
+        $services = service::all();
+        return view('notifications.create', compact('services'));
     }
 
     /**
@@ -52,7 +53,7 @@ class NotificationsController extends Controller
      */
     public function create()
     {
-        //
+        return view('notifications.create');
     }
 
     /**
@@ -71,7 +72,7 @@ class NotificationsController extends Controller
 
         $notification->save();
 
-        return view('notifications.index'); 
+        return view('notifications.index');
     }
 
     /**
