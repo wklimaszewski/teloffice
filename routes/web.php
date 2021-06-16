@@ -55,5 +55,6 @@ Route::resource('notifications', App\Http\Controllers\NotificationsController::c
 
 Route::get('faktura_add', 'App\Http\Controllers\InvoicesController@create_pdf');
 Route::get('umowa_add', 'App\Http\Controllers\AgreementsController@create_pdf');
-Route::get('firmy', 'App\Http\Controllers\ForCustomerController@show_companies');
+Route::get('firmy', 'App\Http\Controllers\ForCustomerController@show_companies')->name('oferta');
+Route::get('filtr', 'App\Http\Controllers\ForCustomerController@filtr_data')->name('filtr');
 require __DIR__.'/auth.php';
