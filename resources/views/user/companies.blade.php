@@ -71,8 +71,8 @@
                                                                                     alt="{{ $company->name }}"/>
                                                 <!-- Portfolio Modal - Text-->
                                                 <p class="mb-5">{{ $company->description }}</p>
-                                                <button class="btn btn-primary" href="#" data-dismiss="modal"><i
-                                                        class="fas fa-times fa-fw"></i>Close Window
+                                                <button class="btn btn-primary" href="#" data-dismiss="modal">
+                                                    Przejrzyj ofertę
                                                 </button>
                                             </div>
                                         </div>
