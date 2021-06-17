@@ -42,8 +42,8 @@ class NotificationsController extends Controller
 ////        dd($array2);
 //        $services = service::whereIn('id', $array2)->get();
 
-        $services = service::all();
-        return view('notifications.create', compact('services'));
+//        $services = service::all();
+//        return view('notifications.create', compact('services'));
     }
 
     /**
@@ -53,7 +53,28 @@ class NotificationsController extends Controller
      */
     public function create()
     {
-        return view('notifications.create');
+        $customer_id = customer::where('user_id', Auth::user()->id)->first();
+
+        $agreement_id = agreement::where('customer_id', $customer_id->id)->get();
+
+        $array = array();
+
+        foreach ($agreement_id as $a)
+        {
+            array_push($array, $a->id);
+        }
+
+        $services_id = agreements_service::whereIn('agreement_id', $array )->get();
+
+        $array2 = array();
+
+        foreach ($services_id as $s)
+        {
+            array_push($array2, $s->id);
+        }
+        $services = service::whereIn('id', $array2)->get();
+
+        return view('notifications.create', compact('services'));
     }
 
     /**
@@ -64,15 +85,16 @@ class NotificationsController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        $customer_id = customer::where('user_id', Auth::user()->id)->first();
         $notification = new notification();
+        $notification->customer_id = $customer_id->id;
         $notification->service_id = $request->service_id;
         $notification->description = $request->description;
         $notification->address = $request->miasto." ".$request->ulica." ".$request->kod_pocztowy;
 
         $notification->save();
 
-        return view('notifications.index');
+        return redirect()->route('zgloszenia')->with('success','Pomyślanie dodano zgłoszenie');
     }
 
     /**

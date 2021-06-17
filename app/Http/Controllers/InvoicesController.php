@@ -37,6 +37,16 @@ class InvoicesController extends Controller
                 ->where('users.id','=',auth()->user()->id)
                 ->get();
         }
+        else
+        {
+            $invoices = Db::table('db_invoices')
+                ->join('agreements', 'db_invoices.agreement_id','=','agreements.id')
+                ->join('customers', 'agreements.customer_id', '=', 'customers.id')
+                ->join('users', 'customers.user_id','=','users.id')
+                ->select('db_invoices.*')
+                ->where('users.id','=',auth()->user()->id)
+                ->get();
+        }
 
         return view('invoices.index', compact('invoices'));
     }

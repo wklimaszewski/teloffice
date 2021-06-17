@@ -127,9 +127,9 @@
             <div id="Map" style="height: 400px; width: 60%;"></div>
         </div>
         <div>
-            <div class="row">
+            <div class="row justify-content-center">
                 <div class="col-xs-6 col-sm-6 col-md-6">
-                    <div class="form-group" style="text-align: center;">
+                    <div class="form-group" style="text-align: center">
                         <strong>Wpisz adres lub zaznacz punkt na mapie:</strong><br>
                         <label>Miejscowość:</label>
                         <input type="text" name="miasto" id="miasto" placeholder="Podaj miasto" onkeyup="Check()"><br>
@@ -167,7 +167,7 @@
 
     </form>
 
-<script src="js/OpenLayers-2.13.1/OpenLayers.js"></script>
+<script src="{{asset('js/OpenLayers-2.13.1/OpenLayers.js')}}"></script>
 <script>
 
 

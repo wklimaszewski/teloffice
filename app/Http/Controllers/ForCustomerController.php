@@ -8,6 +8,7 @@ use App\Models\area;
 use App\Models\company;
 use App\Models\customer;
 use App\Models\db_invoice;
+use App\Models\notification;
 use App\Models\service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -52,6 +53,45 @@ class ForCustomerController extends Controller
         $services = service::where('company_id', $request->company_id)->get();
 
         return view('user/services', compact('services'));
+    }
+
+    public function show_agreements()
+    {
+        $customer = customer::where('user_id', auth()->user()->id)->first();
+        $agreements = agreement::where('customer_id', $customer->id)
+            ->join('companies','agreements.company_id','=','companies.id')
+            ->join('agreements_services','agreements_services.agreement_id','=','agreements.id')
+            ->join('services', 'agreements_services.service_id','=','services.id')
+            ->select('agreements.*', 'companies.name as company', 'services.name as service')
+            ->get();
+
+        return view('user/agreements', compact('agreements'));
+    }
+
+    public function show_invoices()
+    {
+        $customer = customer::where('user_id', auth()->user()->id)->first();
+        $invoices = agreement::where('customer_id', $customer->id)
+            ->join('db_invoices', 'db_invoices.agreement_id','=','agreements.id')
+            ->join('companies','agreements.company_id','=','companies.id')
+            ->join('agreements_services','agreements_services.agreement_id','=','agreements.id')
+            ->join('services', 'agreements_services.service_id','=','services.id')
+            ->select('db_invoices.*', 'companies.name as company', 'services.name as service', 'agreements.number as agreement')
+            ->get();
+
+        return view('user/invoices', compact('invoices'));
+    }
+
+    public function show_notifications()
+    {
+        $customer = customer::where('user_id', auth()->user()->id)->first();
+
+        $notifications = notification::where('customer_id', $customer->id)
+            ->join('services','notifications.service_id','=','services.id')
+            ->join('companies','services.company_id','=','companies.id')
+            ->select('notifications.*', 'services.name as service', 'companies.name as company')
+            ->get();
+        return view('user/notifications', compact('notifications'));
     }
 
     public function confirm(Request $request)

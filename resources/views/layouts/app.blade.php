@@ -29,13 +29,23 @@
                                                      href="{{ route('oferta') }}">OFERTA</a>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
-                                                     href="#about">UMOWY</a>
+                                                     href="{{ route('umowy') }}">UMOWY</a>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
-                                                     href="#contact">ZGŁOSZENIA</a>
+                                                     href="{{ route('zgloszenia') }}">ZGŁOSZENIA</a>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
-                                                     href="#contact">FAKTURY</a>
+                                                     href="{{ route('faktury') }}">FAKTURY</a>
+                </li>
+                <li class="nav-item mx-0 mx-lg-1"><form class="form-inline my-2 my-lg-0" method="POST" action="{{ route('logout') }}">
+                        @csrf
+
+                        <x-responsive-nav-link :href="route('logout')"
+                                               onclick="event.preventDefault();
+                                        this.closest('form').submit();">
+                            {{ __('Wyloguj') }}
+                        </x-responsive-nav-link>
+                    </form>
                 </li>
             </ul>
         </div>
