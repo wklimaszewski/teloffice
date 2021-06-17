@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class db_invoice extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'agreement_id',
+        'number',
+        'price',
+        'confirm'
+    ];
 }

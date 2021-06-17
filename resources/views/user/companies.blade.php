@@ -71,9 +71,12 @@
                                                                                     alt="{{ $company->name }}"/>
                                                 <!-- Portfolio Modal - Text-->
                                                 <p class="mb-5">{{ $company->description }}</p>
-                                                <button class="btn btn-primary" href="#" data-dismiss="modal">
-                                                    Przejrzyj ofertę
-                                                </button>
+                                                <form action="{{ route('uslugi') }}">
+                                                    <input type="hidden" name="company_id" value="{{ $company->id }}">
+                                                    <button class="btn btn-primary" type="submit">
+                                                        Przejrzyj ofertę
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

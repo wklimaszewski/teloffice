@@ -56,5 +56,9 @@ Route::resource('notifications', App\Http\Controllers\NotificationsController::c
 Route::get('faktura_add', 'App\Http\Controllers\InvoicesController@create_pdf');
 Route::get('umowa_add', 'App\Http\Controllers\AgreementsController@create_pdf');
 Route::get('firmy', 'App\Http\Controllers\ForCustomerController@show_companies')->name('oferta');
-Route::get('filtr', 'App\Http\Controllers\ForCustomerController@filtr_data')->name('filtr');
+Route::get('uslugi', 'App\Http\Controllers\ForCustomerController@show_services')->name('uslugi');
+Route::get('potwierdzenie', 'App\Http\Controllers\ForCustomerController@confirm')->name('potwierdzenie');
+Route::get('gotowe', 'App\Http\Controllers\ForCustomerController@done')->name('gotowe');
+Route::get('pobierz_fakture', 'App\Http\Controllers\ForCustomerController@pobierz_fakture')->name('pobierz_fakture');
+Route::get('pobierz_umowe', 'App\Http\Controllers\ForCustomerController@pobierz_umowe')->name('pobierz_umowe');
 require __DIR__.'/auth.php';

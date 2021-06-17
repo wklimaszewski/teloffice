@@ -56,8 +56,6 @@ class InvoicesController extends Controller
             $agreements = agreement::where('company_id',$company->id )->get();
         }
 
-
-
         return view('invoices.create', compact('agreements'));
     }
 
@@ -187,7 +185,7 @@ class InvoicesController extends Controller
             ->buyer($customer)
             ->date(now())
             ->dateFormat('d/m/Y')
-            ->payUntilDays(14)
+            ->payUntilDays(30)
             ->currencySymbol('PLN')
             ->currencyCode('PLN')
             ->currencyFormat('{VALUE}{SYMBOL}')
@@ -199,9 +197,6 @@ class InvoicesController extends Controller
             ->logo(public_path('images/logo.png'))
             // You can additionally save generated invoice to configured disk
             ->save('invoices');
-
-        $link = $invoice->url();
-        // Then send email to party with link
 
         // And return invoice itself to browser or have a different view
         return $invoice->stream();

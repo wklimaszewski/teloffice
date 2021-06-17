@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\agreement;
+use App\Models\agreements_service;
 use App\Models\area;
 use App\Models\company;
+use App\Models\customer;
+use App\Models\db_invoice;
+use App\Models\service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
+use LaravelDaily\Invoices\Classes\Party;
+use LaravelDaily\Invoices\Invoice;
+use Response;
 
 class ForCustomerController extends Controller
 {
@@ -38,9 +47,203 @@ class ForCustomerController extends Controller
 
         return view('user/companies', compact('companies', 'areas'));
     }
-    public function show_agreements()
+    public function show_services(Request $request)
     {
+        $services = service::where('company_id', $request->company_id)->get();
 
+        return view('user/services', compact('services'));
+    }
+
+    public function confirm(Request $request)
+    {
+        $service_id = $request->service_id;
+        $service = service::where('id',$service_id)->first();
+        $company = company::where('id', $service->company_id)->first();
+
+        $customer = customer::where('user_id', auth()->user()->id)->first();
+
+        return view('user/confirm', compact('customer', 'company', 'service'));
+    }
+
+    public function done(Request $request)
+    {
+        $customer = json_decode($request->customer);
+        $company = json_decode($request->company);
+        $service = json_decode($request->service);
+//        dd($request->duration);
+//        dd(agreement::latest()->first()->number+1);
+
+        $agreement = agreement::create([
+            'customer_id' => $customer->id,
+            'company_id' => $company->id,
+            'number' => agreement::latest()->first()->number+1,
+            'duration' => $request->duration,
+            'start_price' => $service->start_price,
+            'price_for_month' => $service->price_for_month
+        ]);
+
+        $agreement_service = agreements_service::create([
+            'agreement_id' => $agreement->id,
+            'service_id' =>$service->id
+        ]);
+
+        $invoice = db_invoice::create([
+            'agreement_id' => $agreement->id,
+            'number' => db_invoice::latest()->first()->number+1,
+            'price' => $agreement->start_price+$agreement->price_for_month,
+        ]);
+
+        $this->agreement_pdf($agreement->id);
+        $this->invoice_pdf($invoice->id, $agreement->id, $company->id, $customer->id);
+
+        return view('user/info', compact('agreement', 'invoice'));
+    }
+
+
+
+    public function agreement_pdf($id)
+    {
+        $pdf = \App::make('dompdf.wrapper');
+
+        $agreement = agreement::where('id', $id)->first();
+        $company = company::where('id', $agreement->company_id)->first();
+        $customer = customer::where('id', $agreement->customer_id)->first();
+        $service_id = agreements_service::select('service_id')->where('agreement_id', $id)->get();
+
+        $array = array();
+        foreach($service_id as $id)
+        {
+            array_push($array, $id->service_id);
+        }
+
+        $services = service::whereIn('id', $array)->get();
+
+        $service_name = array();
+        foreach ($services as $service)
+        {
+            array_push($service_name,$service->name.", opłata miesięczna - ".$service->price_for_month);
+        }
+
+        $data =
+            [
+                "customer_name" => $customer->name." ". $customer->surname,
+                "customer_address" => $customer->address,
+                "customer_phone" => $customer->phone,
+                "customer_email" => $customer->email,
+                "customer_pesel" => $customer->pesel,
+                "company_name" => $company->name,
+                "company_nip" => $company->nip,
+                "company_address" => $company->address,
+                "company_account_number" => $company->account_number,
+                "company_phone" => $company->phone,
+                "company_email" => $company->email,
+                "services" => $service_name,
+                "agreement_number" => $agreement->number,
+                "agreement_duration" => $agreement->duration,
+            ];
+
+
+        $pdf->loadView('agreements.template', compact('data'));
+        $pdf->save('docs/agreements/'.$agreement->id.'.pdf');
+
+//        return $pdf->download('umowa_'.$agreement->number.'.pdf',['Content-Type' => 'application/pdf']);
+    }
+
+    public function invoice_pdf($invoice_id, $agreement_id, $company_id, $customer_id)
+    {
+        $invoice = db_invoice::where('id', $invoice_id)->first();
+        $agreement = agreement::where('id', $agreement_id)->first();
+        $company = company::where('id', $company_id)->first();
+        $contractor = customer::where('id', $customer_id )->first();
+
+        $service_id = agreements_service::select('service_id')->where('agreement_id', $agreement_id)->get();
+
+        $array = array();
+        foreach($service_id as $id)
+        {
+            array_push($array, $id->service_id);
+        }
+
+        $service_list = service::whereIn('id', $array)->get();
+
+        $client = new Party([
+            'name' => $company->name,
+            'phone' => $company->phone,
+            'email' => $company->email,
+            'custom_fields' => [
+                'Adres' => $company->address,
+                'NIP' => $company->nip,
+                'Numer konta bankowego' => $company->account_number,
+            ],
+        ]);
+
+        $customer = new Party([
+            'name' => $contractor->name." ". $contractor->surname,
+            'phone' => $contractor->phone,
+            'email' => $contractor->email,
+            'address'       => $contractor->address,
+            'custom_fields' => [
+                'Pesel' => $contractor->pesel,
+            ],
+        ]);
+
+        $items = array();
+        array_push($items,(new InvoiceItem())->title('Instalacja')->pricePerUnit($agreement->start_price) );
+
+        foreach ($service_list as $service)
+        {
+            array_push($items, (new InvoiceItem())->title($service->name)->pricePerUnit($service->price_for_month) );
+        }
+
+        $notes = [
+            'Faktura została wygenerowana za pośrednictwem TELOFFICE',
+        ];
+        $notes = implode("<br>", $notes);
+
+        $invoice = Invoice::make('FAKTURA')
+            ->series('BIG')
+            ->sequence($invoice->number)
+            ->serialNumberFormat('FAKTURA/{SEQUENCE}')
+            ->seller($client)
+            ->buyer($customer)
+            ->date(now())
+            ->dateFormat('d/m/Y')
+            ->payUntilDays(30)
+            ->currencySymbol('PLN')
+            ->currencyCode('PLN')
+            ->currencyFormat('{VALUE}{SYMBOL}')
+            ->currencyThousandsSeparator('.')
+            ->currencyDecimalPoint(',')
+            ->filename($invoice->id)
+            ->addItems($items)
+            ->notes($notes)
+            ->logo(public_path('images/logo.png'))
+            // You can additionally save generated invoice to configured disk
+            ->save('invoices');
+
+//        return $invoice->download(['Content-Type' => 'application/pdf']);
+    }
+
+    public function pobierz_umowe(Request $request)
+    {
+        $file= "docs/agreements/".$request->agreement.".pdf";
+
+        $headers = array(
+            'Content-Type: application/pdf',
+        );
+
+        return Response::download($file, 'Umowa.pdf', $headers);
+    }
+
+    public function pobierz_fakture(Request $request)
+    {
+        $file= "storage/invoices/".$request->invoice.".pdf";
+
+        $headers = array(
+            'Content-Type: application/pdf',
+        );
+
+        return Response::download($file, 'Fatura.pdf', $headers);
     }
 
 
