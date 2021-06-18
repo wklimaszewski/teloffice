@@ -59,9 +59,14 @@ Route::get('firmy', 'App\Http\Controllers\ForCustomerController@show_companies')
 Route::get('umowy', 'App\Http\Controllers\ForCustomerController@show_agreements')->name('umowy');
 Route::get('uslugi', 'App\Http\Controllers\ForCustomerController@show_services')->name('uslugi');
 Route::get('faktury', 'App\Http\Controllers\ForCustomerController@show_invoices')->name('faktury');
-Route::get('potwierdzenie', 'App\Http\Controllers\ForCustomerController@confirm')->name('potwierdzenie');
 Route::get('zgloszenia', 'App\Http\Controllers\ForCustomerController@show_notifications')->name('zgloszenia');
+
+Route::get('potwierdzenie', 'App\Http\Controllers\ForCustomerController@confirm')->name('potwierdzenie');
 Route::get('gotowe', 'App\Http\Controllers\ForCustomerController@done')->name('gotowe');
 Route::get('pobierz_fakture', 'App\Http\Controllers\ForCustomerController@pobierz_fakture')->name('pobierz_fakture');
 Route::get('pobierz_umowe', 'App\Http\Controllers\ForCustomerController@pobierz_umowe')->name('pobierz_umowe');
+
+Route::get('/paypal/checkout/{order}','App\Http\Controllers\PaymentController@getExpressCheckout');
+Route::get('/paypal/checkout-success/{order}','App\Http\Controllers\PaymentController@getCheckoutSuccess')->name('paypal.success');
+Route::get('/paypal/checkout-cancel','App\Http\Controllers\PaymentController@cancelPage')->name('paypal.cancel');
 require __DIR__.'/auth.php';
