@@ -286,6 +286,14 @@ class ForCustomerController extends Controller
         return Response::download($file, 'Fatura.pdf', $headers);
     }
 
+    public function pay(Request $request)
+    {
+//         $nr = $request->faktura;
+//         $number = str_replace("Faktura nr.", "", $nr);
+//
+//         db_invoice::where('number', $number)->first()->update(['confrim'=> 1]);
+    }
+
 
 
 }
