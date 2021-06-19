@@ -58,6 +58,7 @@ class InvoicesController extends Controller
      */
     public function create()
     {
+        $this->middleware('Admin_Company');
         if(auth()->user()->role==1)
             $agreements = agreement::all();
         else if(auth()->user()->role==2)

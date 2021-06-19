@@ -26,11 +26,6 @@ Route::get('/map', function () {
     return view('map');
 });
 
-//Route::get('logout', function ()
-//{
-//    Auth::logout();
-//});
-
 Route::get('/list', function () {
     return view('list');
 });
@@ -38,6 +33,14 @@ Route::get('/list', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/panel', function () {
+    return view('panel');
+})->middleware(['Company'])->name('panel');
+
+Route::get('/admin', function () {
+    return view('admin');
+})->middleware(['Admin'])->name('admin');
 
 Route::resource('invoices', App\Http\Controllers\InvoicesController::class);
 
@@ -47,6 +50,8 @@ Route::middleware([Admin_Company::class])->group(function(){
 //Route::middleware([Company::class])->group(function(){
 	//Route::resource('companies', App\Http\Controllers\CompaniesController::class);
 //});
+
+Route::get('redirects', 'App\Http\Controllers\HomeController@index');
 
 Route::resource('services', App\Http\Controllers\ServicesController::class);
 Route::resource('customers', App\Http\Controllers\CustomerController::class);

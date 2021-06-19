@@ -16,10 +16,24 @@ class ServicesController extends Controller
      */
     public function index()
     {
-        $services = DB::table('services')
-            ->join('companies', 'services.company_id', '=', 'companies.id')
-            ->select('services.*', 'companies.name as company')
-            ->get();
+        $this->middleware('Admin_Company');
+        if(auth()->user()->role == 1)
+        {
+            $services = DB::table('services')
+                ->join('companies', 'services.company_id', '=', 'companies.id')
+                ->select('services.*', 'companies.name as company')
+                ->get();
+        }
+        else
+        {
+            $services = DB::table('services')
+                ->join('companies', 'services.company_id', '=', 'companies.id')
+                ->join('users', 'companies.user_id', '=','users.id')
+                ->select('services.*', 'companies.name as company')
+                ->where('users.id', auth()->user()->id)
+                ->get();
+        }
+
         return  view('services.index', compact('services'));
     }
 
@@ -30,7 +44,16 @@ class ServicesController extends Controller
      */
     public function create()
     {
-        $companies = company::all();
+        $this->middleware('Admin_Company');
+        if(auth()->user()->role == 1)
+        {
+            $companies = company::all();
+        }
+        else
+        {
+            $companies = company::where('user_id', auth()->user()->id)->get();
+        }
+
         return view('services.create', compact('companies'));
     }
 

@@ -24,6 +24,7 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
+            @if(auth()->user()->role == 1)
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Firmy
@@ -33,6 +34,16 @@
                     <a class="dropdown-item" href="{{ route('companies.index') }}">Lista</a>
                 </div>
             </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Klienci
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{{ route('customers.create') }}">Dodaj</a>
+                        <a class="dropdown-item" href="{{ route('customers.index') }}">Lista</a>
+                    </div>
+                </li>
+            @endif
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Faktury
@@ -40,15 +51,6 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ route('invoices.create') }}">Dodaj</a>
                     <a class="dropdown-item" href="{{ route('invoices.index') }}">Lista</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Klienci
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ route('customers.create') }}">Dodaj</a>
-                    <a class="dropdown-item" href="{{ route('customers.index') }}">Lista</a>
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -62,10 +64,20 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Zgłoszenia
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ route('notifications.index') }}">Lista</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Umowy
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ route('agreements.create') }}">Dodaj</a>
+                    @if(auth()->user()->role == 1)
+                        <a class="dropdown-item" href="{{ route('agreements.create') }}">Dodaj</a>
+                    @endif
                     <a class="dropdown-item" href="{{ route('agreements.index') }}">Lista</a>
                 </div>
             </li>

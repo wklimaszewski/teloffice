@@ -10,9 +10,15 @@ use App\Models\service;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Http\Middleware\Admin_Company;
 
 class NotificationsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin_company')->only('index');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,30 +26,27 @@ class NotificationsController extends Controller
      */
     public function index()
     {
-//        $customer_id = customer::where('user_id', Auth::user()->id)->first();
-//
-//        $agreement_id = agreement::where('customer_id', $customer_id->id)->get();
-//
-//        $array = array();
-//
-//        foreach ($agreement_id as $a)
-//        {
-//            array_push($array, $a->id);
-//        }
-//
-//        $services_id = agreements_service::whereIn('agreement_id', $array )->get();
-//
-//        $array2 = array();
-//
-//        foreach ($services_id as $s)
-//        {
-//            array_push($array2, $s->id);
-//        }
-////        dd($array2);
-//        $services = service::whereIn('id', $array2)->get();
-
-//        $services = service::all();
-//        return view('notifications.create', compact('services'));
+        if(auth()->user()->role == 1)
+        {
+            $notifications = Db::table('notifications')
+                ->join('services', 'notifications.service_id','=','services.id')
+                ->join('companies', 'services.company_id','=','companies.id')
+                ->join('customers', 'notifications.customer_id','=','customers.id')
+                ->select('notifications.*', 'services.name as service', 'companies.name as company','customers.name as customer_name', 'customers.surname as customer_surname')
+                ->get();
+        }
+        else
+        {
+            $notifications = Db::table('notifications')
+                ->join('services', 'notifications.service_id','=','services.id')
+                ->join('companies', 'services.company_id','=','companies.id')
+                ->join('users', 'companies.user_id','=','users.id')
+                ->join('customers', 'notifications.customer_id','=','customers.id')
+                ->select('notifications.*', 'services.name as service', 'companies.name as company','customers.name as customer_name', 'customers.surname as customer_surname')
+                ->where('users.id', auth()->user()->id)
+                ->get();
+        }
+        return view('notifications.index', compact('notifications'));
     }
 
     /**

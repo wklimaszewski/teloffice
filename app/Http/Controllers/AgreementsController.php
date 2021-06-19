@@ -9,9 +9,14 @@ use App\Models\service;
 use App\Models\agreement;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\PDF;
+use Illuminate\Support\Facades\DB;
 
 class AgreementsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin_company');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +24,23 @@ class AgreementsController extends Controller
      */
     public function index()
     {
-        dd("hello");
+        $this->middleware('Admin_Company');
+        if(auth()->user()->role == 1)
+        {
+            $agreements = agreement::all();
+        }
+        else
+        {
+            $agreements = Db::table('agreements')
+                ->join('companies', 'agreements.company_id', '=', 'companies.id')
+                ->join('users', 'companies.user_id','=','users.id')
+                ->join('customers', 'agreements.customer_id','=','customers.id')
+                ->select('agreements.*', 'companies.name as company', 'customers.name as customer_name', 'customers.surname as customer_surname')
+                ->where('users.id','=',auth()->user()->id)
+                ->get();
+        }
+//        dd($agreements);
+        return view('agreements.index', compact('agreements'));
 
     }
 
@@ -81,58 +102,14 @@ class AgreementsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\agreement  $agreement
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(agreement $agreement)
     {
-        //
+        $agreement->delete();
+        return redirect()->route('agreement.index')
+            ->with('success', 'Product deleted successfully');
     }
 
-    public function create_pdf()
-    {
-        $id=1;
-        $pdf = \App::make('dompdf.wrapper');
-
-        $agreement = agreement::where('id', $id)->first();
-        $company = company::where('id', $agreement->company_id)->first();
-        $customer = customer::where('id', $agreement->customer_id)->first();
-        $service_id = agreements_service::select('service_id')->where('agreement_id', $id)->get();
-
-        $array = array();
-        foreach($service_id as $id)
-        {
-            array_push($array, $id->service_id);
-        }
-
-        $services = service::whereIn('id', $array)->get();
-
-        $service_name = array();
-        foreach ($services as $service)
-        {
-            array_push($service_name,$service->name.", opłata miesięczna - ".$service->price_for_month);
-        }
-
-        $data =
-            [
-                "customer_name" => $customer->name." ". $customer->surname,
-                "customer_address" => $customer->address,
-                "customer_phone" => $customer->phone,
-                "customer_email" => $customer->email,
-                "customer_pesel" => $customer->pesel,
-                "company_name" => $company->name,
-                "company_nip" => $company->nip,
-                "company_address" => $company->address,
-                "company_account_number" => $company->account_number,
-                "company_phone" => $company->phone,
-                "company_email" => $company->email,
-                "services" => $service_name,
-                "agreement_number" => $agreement->number,
-                "agreement_duration" => $agreement->duration,
-            ];
-
-
-        $pdf->loadView('agreements.template', compact('data'));
-        return $pdf->stream();
-    }
 }
