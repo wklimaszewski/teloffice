@@ -29,6 +29,9 @@
                                     </button>
                                 </div>
                             </form>
+                            <form class="form-inline" role="form" action="{{ route('map') }}" >
+                                <button type="submit" class="btn btn-secondary" style="margin-top: 10px;">SPRAWDŹ DOSTĘPNOŚĆ NA MAPIE</button>
+                            </form>
                         </div>
                     </div>
             </div>

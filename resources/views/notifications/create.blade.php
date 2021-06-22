@@ -137,7 +137,7 @@
                         <input type="text" name="ulica" id="ulica" placeholder="Podaj ulicę" onkeyup="Check()"><br>
                         <label>Kod pocztowy(opcjonalnie):</label>
                         <input type="text" name="kod_pocztowy" id="kod_pocztowy" placeholder="Podaj kod pocztowy" onkeyup="Check()"><br>
-                        <input type="submit" class="btn btn-dark" onclick="szukaj()" value="ZAZNACZ">
+                        <input type="button" class="btn btn-dark" onclick="szukaj()" value="ZAZNACZ">
                     </div>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6">
@@ -151,15 +151,6 @@
 
                     </div>
                 </div>
-{{--            <div class="col-xs-4 col-sm-4 col-md-4">--}}
-{{--                <div class="form-group">--}}
-{{--                    <div class="row justify-content-center">--}}
-{{--                        <strong>Znaleziony adres:</strong>--}}
-{{--                        <div id="pokaz"></div>--}}
-{{--                        <label id="kordy"></label>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
                 <br><br>
                 <input type="submit" class="btn btn-success" value="WYŚLIJ ZGŁOSZENIE" style="width: 60%; margin-left: auto; margin-right: auto">
             </div>
@@ -202,6 +193,7 @@
 
     function uzupelnij(wynik)
     {
+        console.log(wynik);
         if(typeof wynik.city !== 'undefined')
         {
             document.getElementById("miasto").value = wynik.city;
@@ -232,11 +224,10 @@
                     document.getElementById("ulica").value = wynik.house_number;
                 }
             }
-
         }
 
-
-        document.getElementById("kod_pocztowy").value = wynik.postcode;
+        if(typeof wynik.postcode !== 'undefined')
+            document.getElementById("kod_pocztowy").value = wynik.postcode;
     }
 
     function namierz()
@@ -253,7 +244,6 @@
                     url: "https://nominatim.openstreetmap.org/reverse?lon="+location.coords.longitude+"&lat="+location.coords.latitude+"&format=json&addressdetails=1",
                     success: function(result)
                     {
-                        console.log(result);
                         if(result!=0)
                         {
                             uzupelnij(result.address);
@@ -297,9 +287,6 @@
                         var pos = new OpenLayers.LonLat(result[0].lon, result[0].lat).transform( fromProjection, toProjection);
                         markers.addMarker(new OpenLayers.Marker(pos));
                         CenterMap(result[0].lon, result[0].lat);
-                        // uzupelnij(result[0].address);
-                        // document.getElementById("pokaz").innerHTML = "<label>Znaleziony adres:</label><br>"+result[0].display_name+"<br><label>lon&lat:</label><br>lon: "
-                        //     +result[0].lon+"<br>lat: "+result[0].lat+"<br><button>POTWIERDŹ</button><br>";
                     }
                 }
             }
@@ -308,12 +295,9 @@
 
     function Check()
     {
-        if(document.getElementById('miasto').value.length > 3){
-            // podpowiedz_miasto();
+        if(document.getElementById('miasto').value.length >2 )
             document.getElementById("ulica").disabled = false;
-        }
-        // else
-        //     autocomplete(document.getElementById("miasto"), nazwa, gmina, powiat,wojew,sym);
+
     }
 
     function dodajZnacznik()
@@ -327,7 +311,6 @@
                 url: "https://nominatim.openstreetmap.org/reverse?lon="+coord.lon+"&lat="+coord.lat+"&format=json",
                 success: function(result)
                 {
-                    // console.log(result);
                     if(result!=0)
                     {
                         var min = zmierz(coord.lat,coord.lon,result.lat,result.lon);
@@ -336,17 +319,35 @@
                         var najmniej;
                         if(result.address.house_number != null)
                         {
-                            var pos       = new OpenLayers.LonLat(result.lon, result.lat).transform( fromProjection, toProjection);
-                            markers.addMarker(new OpenLayers.Marker(pos));
+                            if(min>jeden)
+                            {
+                                min = jeden;
+                                if(min>dwa)
+                                    najmniej=dwa;
+                                else
+                                    najmniej=min;
+                            }
+                            else
+                            {
+                                if(min>dwa)
+                                    najmniej=dwa;
+                                else
+                                    najmniej=min;
+                            }
+                            if(najmniej<101){
+                                var pos       = new OpenLayers.LonLat(result.lon, result.lat).transform( fromProjection, toProjection);
+                                markers.addMarker(new OpenLayers.Marker(pos));
+                            }
+                            else
+                            {
+                                var pos       = new OpenLayers.LonLat(coord.lon, coord.lat).transform( fromProjection, toProjection);
+                                markers.addMarker(new OpenLayers.Marker(pos));
+                            }
                             uzupelnij(result.address);
-                            // document.getElementById("pokaz").innerHTML = "<label>Znaleziony adres:</label><br>"+result.display_name+"<br>lon: "
-                            //     +result.lon+"<br>lat: "+result.lat+"<br><button>POTWIERDŹ</button><br>";
                         }
                         else
                         {
                             uzupelnij(result.address);
-                            // document.getElementById("pokaz").innerHTML = "<label>Znaleziony adres:</label><br>"+result.display_name+"<br><label>lon&lat:</label><br>lon: "
-                            //     +result.lon+"<br>lat: "+result.lat+"<br><button>POTWIERDŹ</button><br>";
                             var pos       = new OpenLayers.LonLat(coord.lon, coord.lat).transform( fromProjection, toProjection);
                             markers.addMarker(new OpenLayers.Marker(pos));
                         }
@@ -369,9 +370,7 @@
     function usunZnacznik()
     {
         markers.clearMarkers();
-        document.getElementById("miasto").value = "";
-        document.getElementById("ulica").value = "";
-        document.getElementById("kod_pocztowy").value = "";
+        map.setCenter(ol.proj.transform([19.095353598806504, 52.22279090653282], 'EPSG:4326', 'EPSG:3857'),5.6);
     }
 
     function zmierz(lat1, lon1, lat2, lon2)
@@ -386,9 +385,8 @@
         var c = R * b;
         return c * 1000; // metry (granica błędu 5-7m)
     }
+
     dodajZnacznik();
-
-
 
 </script>
 

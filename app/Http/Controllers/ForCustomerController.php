@@ -286,13 +286,57 @@ class ForCustomerController extends Controller
         return Response::download($file, 'Fatura.pdf', $headers);
     }
 
-    public function pay(Request $request)
+    public function map()
     {
-//         $nr = $request->faktura;
-//         $number = str_replace("Faktura nr.", "", $nr);
-//
-//         db_invoice::where('number', $number)->first()->update(['confrim'=> 1]);
+        $companies = company::all();
+        return view('user/map_companies', compact('companies'));
     }
+
+    public function map_check(Request $request)
+    {
+        $woj = $request->woj;
+
+        if($woj== "województwo podlaskie")
+            $area_id= 1;
+        else if($woj == "województwo mazowieckie")
+            $area_id = 2;
+        else if($woj == "województwo pomorskie")
+            $area_id = 3;
+        else if($woj == "województwo opolskie")
+            $area_id = 4;
+        else if($woj == "województwo dolnośląskie")
+            $area_id = 5;
+        else if($woj == "województwo kujawsko-pomorskie")
+            $area_id = 6;
+        else if($woj == "województwo lubelskie")
+            $area_id = 7;
+        else if($woj == "województwo lubuskie")
+            $area_id = 8;
+        else if($woj == "województwo łodzkie")
+            $area_id = 9;
+        else if($woj == "województwo małopolskie")
+            $area_id = 10;
+        else if($woj == "województwo podkarpackie")
+            $area_id = 11;
+        else if($woj == "województwo śląskie")
+            $area_id = 12;
+        else if($woj == "województwo świętokrzyskie")
+            $area_id = 13;
+        else if($woj == "województwo warmińsko-mazurskie")
+            $area_id = 14;
+        else if($woj == "województwo wielkopolskie")
+            $area_id = 15;
+        else if($woj == "województwo zachodniopomorskie")
+            $area_id = 16;
+
+        $array = array();
+        array_push($array, $area_id);
+        array_push($array, 17);
+        $company = company::whereIn('area_id', $array)->get();
+
+        return $company;
+    }
+
 
 
 

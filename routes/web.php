@@ -65,6 +65,8 @@ Route::get('umowy', 'App\Http\Controllers\ForCustomerController@show_agreements'
 Route::get('uslugi', 'App\Http\Controllers\ForCustomerController@show_services')->name('uslugi');
 Route::get('faktury', 'App\Http\Controllers\ForCustomerController@show_invoices')->name('faktury');
 Route::get('/oplac', 'App\Http\Controllers\ForCustomerController@pay')->name('oplac');
+Route::get('/map', 'App\Http\Controllers\ForCustomerController@map')->name('map');
+Route::get('/map_check', 'App\Http\Controllers\ForCustomerController@map_check')->name('map_check');
 Route::get('zgloszenia', 'App\Http\Controllers\ForCustomerController@show_notifications')->name('zgloszenia');
 
 Route::get('potwierdzenie', 'App\Http\Controllers\ForCustomerController@confirm')->name('potwierdzenie');
