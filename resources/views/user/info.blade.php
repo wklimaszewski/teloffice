@@ -4,7 +4,6 @@
 
         <div class="row justify-content-center">
             <h1 style="color: green">Gratulacje podpisałeś umowę nr. {{$agreement->number}}</h1>
-            <p>Poniżej możesz pobrać umowę oraz fakturę</p>
         </div>
         <div style="width: 80%; margin-right: auto; margin-left: auto; margin-top: 20px; margin-bottom: 20px">
             <img src="{{ asset('images/confirm.jpg') }}" style="width: 100%">

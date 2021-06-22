@@ -257,7 +257,7 @@
                     @if($invoice->hasItemTax)
                         <th scope="col" class="text-right border-0">{{ __('TAX') }}</th>
                     @endif
-                    <th scope="col" class="text-right border-0 pr-0">{{ __('Cena') }}</th>
+                    <th scope="col" class="text-right border-0 pr-0">{{ __('Cena całkowita ') }}</th>
                 </tr>
             </thead>
             <tbody>
