@@ -312,7 +312,7 @@ class ForCustomerController extends Controller
             $area_id = 7;
         else if($woj == "województwo lubuskie")
             $area_id = 8;
-        else if($woj == "województwo łodzkie")
+        else if($woj == "województwo łódzkie")
             $area_id = 9;
         else if($woj == "województwo małopolskie")
             $area_id = 10;
