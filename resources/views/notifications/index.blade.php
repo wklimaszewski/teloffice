@@ -26,6 +26,7 @@
                         <th scope="col">Adres</th>
                         <th scope="col">Status</th>
                         <th scope="col">Data utworzenia</th>
+                        <th scope="col">Zmień status</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -38,6 +39,17 @@
                             <td>{{ $n->address }}</td>
                             <td>{{ $n->status }}</td>
                             <td>{{ $n->created_at }}</td>
+                            <td>
+                                <form action="{{ route('update_status') }}">
+                                    <input type="hidden" value="{{ $n->id }}" name="id">
+                                    <select name="status">
+                                        <option value="Przyjęto">Przyjmij</option>
+                                        <option value="W trakcie realizacji">Realizuj</option>
+                                        <option value="Zakończono">Zakończ</option>
+                                    </select>
+                                    <input type="submit" value="OK">
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                     </tbody>

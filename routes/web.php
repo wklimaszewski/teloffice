@@ -58,6 +58,8 @@ Route::resource('customers', App\Http\Controllers\CustomerController::class);
 Route::resource('agreements', App\Http\Controllers\AgreementsController::class);
 Route::resource('notifications', App\Http\Controllers\NotificationsController::class);
 
+Route::get('update_status','App\Http\Controllers\NotificationsController@update_status')->name('update_status');
+Route::get('change_status','App\Http\Controllers\InvoicesController@update_status')->name('change_status');
 Route::get('faktura_add', 'App\Http\Controllers\InvoicesController@create_pdf');
 Route::get('umowa_add', 'App\Http\Controllers\AgreementsController@create_pdf');
 Route::get('firmy', 'App\Http\Controllers\ForCustomerController@show_companies')->name('oferta');

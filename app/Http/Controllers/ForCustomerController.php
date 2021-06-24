@@ -78,8 +78,16 @@ class ForCustomerController extends Controller
             ->join('services', 'agreements_services.service_id','=','services.id')
             ->select('db_invoices.*', 'companies.name as company', 'services.name as service', 'agreements.number as agreement')
             ->get();
+        $invoices_pp = agreement::where('customer_id', $customer->id)
+            ->join('db_invoices', 'db_invoices.agreement_id','=','agreements.id')
+            ->join('companies','agreements.company_id','=','companies.id')
+            ->join('agreements_services','agreements_services.agreement_id','=','agreements.id')
+            ->join('services', 'agreements_services.service_id','=','services.id')
+            ->where('db_invoices.confirm','=',0)
+            ->select('db_invoices.*', 'companies.name as company', 'services.name as service', 'agreements.number as agreement')
+            ->get();
 
-        return view('user/invoices', compact('invoices'));
+        return view('user/invoices', compact('invoices', 'invoices_pp'));
     }
 
     public function show_notifications()
@@ -335,6 +343,15 @@ class ForCustomerController extends Controller
         $company = company::whereIn('area_id', $array)->get();
 
         return $company;
+    }
+
+    public function pay(Request $request)
+    {
+        $invoice = db_invoice::find($request->id);
+
+        $invoice->confirm = 1;
+        $invoice->save();
+        return 1;
     }
 
 

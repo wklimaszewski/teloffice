@@ -7,6 +7,7 @@ use App\Models\agreements_service;
 use App\Models\company;
 use App\Models\customer;
 use App\Models\db_invoice;
+use App\Models\notification;
 use App\Models\service;
 use http\Client\Curl\User;
 use Illuminate\Database\Eloquent\Model;
@@ -136,6 +137,18 @@ class InvoicesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function update_status(Request $request)
+    {
+        $invoices = db_invoice::find($request->id);
+        if($invoices->confirm == 1)
+            $invoices->confirm = 0;
+        else
+            $invoices->confirm = 1;
+        $invoices->save();
+
+        return redirect()->route('invoices.index')->with('success', 'Status zmieniono  pomyślnie');
     }
 
     public function create_pdf($invoice_id, $agreement_id, $company_id, $customer_id)

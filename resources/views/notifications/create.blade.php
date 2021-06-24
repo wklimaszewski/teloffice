@@ -125,8 +125,6 @@
         <h1 style="text-align: center;">Adres</h1><br>
         <div class="row justify-content-center">
             <div id="Map" style="height: 400px; width: 60%;"></div>
-        </div>
-        <div>
             <div class="row justify-content-center">
                 <div class="col-xs-6 col-sm-6 col-md-6">
                     <div class="form-group" style="text-align: center">
@@ -141,7 +139,7 @@
                     </div>
                 </div>
                 <div class="col-xs-6 col-sm-6 col-md-6">
-                    <div class="form-group" style="margin: 20px">
+                    <div class="form-group" style="margin: 20px; float:right">
                         <div class="row justify-content-center">
                             <input type="button" class="btn btn-secondary" value="ZLOKALIZUJ MNIE" name="Lokalizuj" onclick="namierz()" />
                         </div>
@@ -154,6 +152,9 @@
                 <br><br>
                 <input type="submit" class="btn btn-success" value="WYŚLIJ ZGŁOSZENIE" style="width: 60%; margin-left: auto; margin-right: auto">
             </div>
+        </div>
+        <div>
+
         </div>
 
     </form>

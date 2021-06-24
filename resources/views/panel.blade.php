@@ -1,13 +1,14 @@
 @extends('layouts.admin')
 @section('content')
-    <header class="masthead bg-primary text-white text-center">
-            <h1 class="masthead-heading mb-0">Witaj w panelu administracyjnym firmy</h1>
-    </header>
-    <section class="page-section portfolio" id="portfolio">
-    <div class="container">
-        <!-- Portfolio Section Heading-->
-        <div class="row justify-content-center">
+    <div class="masthead container" style="margin-top: -170px">
 
+        <div class="row justify-content-center">
+            <h1>Witaj w panelu administracyjnym Twojej firmy !</h1>
+        </div>
+        <div class="row justify-content-center">
+            <div style="width: 80%; margin-right: auto; margin-left: auto; margin-top: 20px; margin-bottom: 20px">
+                <img src="{{ asset('images/firma.jpg') }}" style="width: 100%">
+            </div>
         </div>
         </div>
     </section>

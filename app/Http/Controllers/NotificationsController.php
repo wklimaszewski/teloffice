@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Http\Middleware\Admin_Company;
+use App\Http\Middleware\Mid_Customer;
 
 class NotificationsController extends Controller
 {
@@ -73,8 +74,9 @@ class NotificationsController extends Controller
 
         foreach ($services_id as $s)
         {
-            array_push($array2, $s->id);
+            array_push($array2, $s->service_id);
         }
+
         $services = service::whereIn('id', $array2)->get();
 
         return view('notifications.create', compact('services'));
@@ -143,5 +145,15 @@ class NotificationsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function update_status(Request $request)
+    {
+        $notification = notification::find($request->id);
+        $notification->status = $request->status;
+        $notification->save();
+
+
+        return redirect()->route('notifications.index')->with('success', 'Status zmieniono  pomyślnie');
     }
 }

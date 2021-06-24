@@ -154,8 +154,8 @@
                             <h3>Opłać fakturę</h3>
                             <p>Wybierz fakturę, którą chcesz opłacić</p>
                             <select id="item-options">
-                                @foreach($invoices as $invoice)
-                                    <option value="Faktura nr. {{ $invoice->number }}" price="{{ $invoice->price }}">Faktura nr. {{ $invoice->number }} - {{ $invoice->price }} zł</option>
+                                @foreach($invoices_pp as $invoice)
+                                    <option value="Faktura nr. {{ $invoice->number }}" price="{{ $invoice->price }}" id="{{ $invoice->id }}">Faktura nr. {{ $invoice->number }} - {{ $invoice->price }} zł</option>
                                 @endforeach
                             </select>
                             <select style="visibility: hidden" id="quantitySelect"></select>
@@ -188,6 +188,7 @@
                             createOrder: function(data, actions) {
                                 var selectedItemDescription = itemOptions.options[itemOptions.selectedIndex].value;
                                 var selectedItemPrice = parseFloat(itemOptions.options[itemOptions.selectedIndex].getAttribute("price"));
+                                selectedID = parseFloat(itemOptions.options[itemOptions.selectedIndex].getAttribute("id"));
                                 var tax = (0 === 0) ? 0 : (selectedItemPrice * (parseFloat(0)/100));
                                 if(quantitySelect.options.length > 0) {
                                     quantity = parseInt(quantitySelect.options[quantitySelect.selectedIndex].value);
@@ -235,8 +236,21 @@
                             },
                             onApprove: function(data, actions) {
                                 return actions.order.capture().then(function(details) {
-                                    alert("Transakcja zakończona pomyślnie, status faktury zostanie zmieniony w chwili zaksięgowania kwoty przez firmę");
+                                    $.ajax({
+                                        url: "oplac",
+                                        type: 'GET',
+                                        dataType: "json",
+                                        data:{ 'id': selectedID},
+                                            success: function(r){
+                                                location.reload();
+                                        },
+                                        error:function (er)
+                                        {
+                                        },
+                                    });
+                                    alert("Transakcja zakończona pomyślnie !");
                                 });
+
                             },
                             onError: function(err) {
                                 console.log(err);

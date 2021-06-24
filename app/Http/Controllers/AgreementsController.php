@@ -79,12 +79,12 @@ class AgreementsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\agreement $agreement
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(agreement $agreement)
     {
-        //
+        return view('agreements.edit', compact('agreement'));
     }
 
     /**
@@ -108,8 +108,8 @@ class AgreementsController extends Controller
     public function destroy(agreement $agreement)
     {
         $agreement->delete();
-        return redirect()->route('agreement.index')
-            ->with('success', 'Product deleted successfully');
+        return redirect()->route('agreements.index')
+            ->with('success', 'Umowa usunięta pomyślnie!');
     }
 
 }

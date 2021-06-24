@@ -23,7 +23,7 @@
                     </div>
                 @endif
 
-                <form action="{{ route('agreements.update',$company->id) }}" method="POST">
+                <form action="{{ route('agreements.update',$agreement->id) }}" method="POST">
                     @csrf
                     @method('PUT')
 
@@ -37,7 +37,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <strong>Cena początkowa:</strong>
-                                <input type="number" class="form-control" style="height:100px" name="description" placeholder="Cena początkowa">{{ $agreement->start_price }}</input>
+                                <input type="number" class="form-control" name="description" placeholder="Cena początkowa" value="{{ $agreement->start_price }}">
                             </div>
 
                         </div>

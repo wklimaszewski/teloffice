@@ -106,7 +106,7 @@
         </div>
         <div>
             <div class="row justify-content-left">
-                <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="col-xs-4 col-sm-4 col-md-4" style="margin: 20px" >
                     <div class="form-group" style="text-align: center">
                         <strong>Wpisz adres lub zaznacz punkt na mapie:</strong><br>
                         <label>Miejscowość:</label>
@@ -119,7 +119,7 @@
                     </div>
 
                 </div>
-                <div class="col-xs-6 col-sm-6 col-md-6">
+                <div class="col-xs-4 col-sm-4 col-md-4">
                     <div class="form-group" style="margin: 20px">
                         <div class="row justify-content-center">
                             <input type="button" class="btn btn-secondary" value="ZLOKALIZUJ MNIE" name="Lokalizuj" onclick="namierz()" />
