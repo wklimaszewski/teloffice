@@ -121,7 +121,7 @@ class ForCustomerController extends Controller
 //        dd($request->duration);
 //        dd(agreement::latest()->first()->number+1);
 
-        $agreement_number  = (agreement::latest()->first()->number == null) ? 206739 : agreement::latest()->first()->number+1;
+        $agreement_number  = (agreement::latest()->first() == null) ? 206739 : agreement::latest()->first()->number+1;
         $agreement = agreement::create([
             'customer_id' => $customer->id,
             'company_id' => $company->id,
@@ -136,7 +136,7 @@ class ForCustomerController extends Controller
             'service_id' =>$service->id
         ]);
 
-        $invoice_number  = (db_invoice::latest()->first()->number == null) ? 415142 : db_invoice::latest()->first()->number+1;
+        $invoice_number  = (db_invoice::latest()->first() == null) ? 466109 : db_invoice::latest()->first()->number+1;
 
         $invoice = db_invoice::create([
             'agreement_id' => $agreement->id,
