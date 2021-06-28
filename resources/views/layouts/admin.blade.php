@@ -30,7 +30,6 @@
                     Firmy
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ route('companies.create') }}">Dodaj</a>
                     <a class="dropdown-item" href="{{ route('companies.index') }}">Lista</a>
                 </div>
             </li>
@@ -39,7 +38,6 @@
                         Klienci
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ route('customers.create') }}">Dodaj</a>
                         <a class="dropdown-item" href="{{ route('customers.index') }}">Lista</a>
                     </div>
                 </li>

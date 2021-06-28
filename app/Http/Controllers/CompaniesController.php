@@ -45,7 +45,7 @@ class CompaniesController extends Controller
      */
     public function store(Request $request)
     {
-        if(!company::where('user_id',Auth::user()->id)->exists() && Auth::user()->role == 2)
+        if(!company::where('user_id',Auth::user()->id)->exists() && (Auth::user()->role == 2 || Auth::user()->role == 1) )
         {
             $request->validate([
                 'name' => 'required',
@@ -67,7 +67,15 @@ class CompaniesController extends Controller
                 $request->file('logo')->storeAs('public/logos', "logo_".$company->id.'.png','');
             }
         }
-        return view('dashboard');
+
+        $companies = DB::table('companies')
+            ->join('areas' , 'companies.area_id' , '=','areas.id')
+            ->select ('companies.*', 'areas.county')
+            ->get();
+        if(auth()->user()->role==1)
+            return view('companies.index', compact('companies'));
+        else
+            return view('dashboard');
     }
 
     /**
@@ -115,7 +123,7 @@ class CompaniesController extends Controller
         $company->update($request->all());
 
         return redirect()->route('companies.index')
-            ->with('success', 'Product updated successfully');
+            ->with('success', 'Firma '.$company->name.' została edytowana pomyslnie');
     }
 
     /**
@@ -128,6 +136,6 @@ class CompaniesController extends Controller
     {
         $company->delete();
         return redirect()->route('companies.index')
-            ->with('success', 'Product deleted successfully');
+            ->with('success', 'Pomyślnie usunięto firmę '.$company->name);
     }
 }

@@ -52,7 +52,10 @@ class CustomerController extends Controller
             $request->request->add(['user_id' => Auth::user()->id]);
             customer::create($request->all());
         }
-        return view('dashboard');
+        if(auth()->user()->role==1)
+            return view('admin');
+        else
+            return view('dashboard');
     }
 
     /**

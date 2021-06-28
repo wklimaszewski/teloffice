@@ -121,10 +121,11 @@ class ForCustomerController extends Controller
 //        dd($request->duration);
 //        dd(agreement::latest()->first()->number+1);
 
+        $agreement_number  = (agreement::latest()->first()->number == null) ? 206739 : agreement::latest()->first()->number+1;
         $agreement = agreement::create([
             'customer_id' => $customer->id,
             'company_id' => $company->id,
-            'number' => agreement::latest()->first()->number+1,
+            'number' => $agreement_number,
             'duration' => $request->duration,
             'start_price' => $service->start_price,
             'price_for_month' => $service->price_for_month
@@ -135,9 +136,11 @@ class ForCustomerController extends Controller
             'service_id' =>$service->id
         ]);
 
+        $invoice_number  = (db_invoice::latest()->first()->number == null) ? 415142 : db_invoice::latest()->first()->number+1;
+
         $invoice = db_invoice::create([
             'agreement_id' => $agreement->id,
-            'number' => db_invoice::latest()->first()->number+1,
+            'number' => $invoice_number,
             'price' => $agreement->start_price+$agreement->price_for_month,
         ]);
 

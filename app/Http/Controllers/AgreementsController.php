@@ -27,7 +27,12 @@ class AgreementsController extends Controller
         $this->middleware('Admin_Company');
         if(auth()->user()->role == 1)
         {
-            $agreements = agreement::all();
+            $agreements = Db::table('agreements')
+                ->join('companies', 'agreements.company_id', '=', 'companies.id')
+                ->join('users', 'companies.user_id','=','users.id')
+                ->join('customers', 'agreements.customer_id','=','customers.id')
+                ->select('agreements.*', 'companies.name as company', 'customers.name as customer_name', 'customers.surname as customer_surname')
+                ->get();
         }
         else
         {
@@ -51,7 +56,10 @@ class AgreementsController extends Controller
      */
     public function create()
     {
-        return view('agreements.create');
+        $companies = company::all();
+        $customers = customer::all();
+
+        return view('agreements.create', compact('companies', 'customers'));
     }
 
     /**
@@ -62,7 +70,27 @@ class AgreementsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'customer_id' => 'required',
+            'company_id' => 'required',
+            'duration' => 'required',
+            'start_price' => 'required',
+            'price_for_month' => 'required',
+        ]);
+
+        $agreement = new agreement();
+        $agreement_number  = (agreement::latest()->first() == null) ? 206739 : agreement::latest()->first()->number+1;
+        $agreement->customer_id = $request->customer_id;
+        $agreement->company_id = $request->company_id;
+        $agreement->duration = $request->duration;
+        $agreement->start_price = $request->start_price;
+        $agreement->price_for_month = $request->price_for_month;
+        $agreement->number = $agreement_number;
+
+        $agreement->save();
+
+        return redirect()->route('agreements.index')->with('success', 'Pomyślnie dodano umowę !');
+
     }
 
     /**
@@ -91,12 +119,20 @@ class AgreementsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\agreement  $agreement
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, agreement $agreement)
     {
-        //
+        $request->validate([
+            'duration' => 'required',
+            'start_price' => 'required',
+            'price_for_month' => 'required',
+        ]);
+        $agreement->update($request->all());
+
+        return redirect()->route('agreements.index')
+            ->with('success', 'Umowa edytowana poprawnie' );
     }
 
     /**

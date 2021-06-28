@@ -31,26 +31,26 @@
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <strong>Czas trwania:</strong>
-                                <input type="text" name="name" value="{{ $agreement->duration }}" class="form-control" placeholder="Czas trwania">
+                                <input type="text" name="duration" value="{{ $agreement->duration }}" class="form-control" placeholder="Czas trwania">
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <strong>Cena początkowa:</strong>
-                                <input type="number" class="form-control" name="description" placeholder="Cena początkowa" value="{{ $agreement->start_price }}">
+                                <input type="number" class="form-control" name="start_price" placeholder="Cena początkowa" value="{{ $agreement->start_price }}">
                             </div>
 
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group">
                                 <strong>Cena miesiączna:</strong>
-                                <input type="number" name="address" value="{{ $agreement->price_for_month }}" class="form-control" placeholder="Cena miesiączna">
+                                <input type="number" name="price_for_month" value="{{ $agreement->price_for_month }}" class="form-control" placeholder="Cena miesiączna">
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                             <div class="pull-right">
                                 <a class="btn btn-primary" href="{{ route('agreements.index') }}"> COFNIJ</a>
-                                <button type="submit" class="btn btn-primary">EDYTUJ</button>
+                                <button type="submit" class="btn btn-primary">ZAPISZ ZMIANY</button>
                             </div>
 
                         </div>
