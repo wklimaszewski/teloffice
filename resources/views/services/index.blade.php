@@ -14,13 +14,13 @@
     </header>
     <section class="page-section portfolio">
         <div class="container">
+            @if ($message = Session::get('success'))
+                <div class="alert alert-success">
+                    <p style="text-align: center;">{{ $message }}</p>
+                </div>
+            @endif
             <div class="row justify-content-center">
-                @if ($alertFm = Session::get('success'))
-                    <div class="alert alert-success alert-block">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                        <strong>{{ $alertFm }}</strong>
-                    </div>
-                @endif
+
                 <table class="table table-bordered" id="table">
                     <thead>
                     <tr>

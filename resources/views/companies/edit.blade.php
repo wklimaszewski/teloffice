@@ -85,7 +85,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
                             <div class="pull-right">
                                 <a class="btn btn-primary" href="{{ route('dashboard') }}"> COFNIJ</a>
-                                <button type="submit" class="btn btn-primary">EDYTUJ</button>
+                                <button type="submit" class="btn btn-primary">ZAPISZ ZMIANY</button>
                             </div>
 
                         </div>
