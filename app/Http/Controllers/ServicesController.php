@@ -92,34 +92,39 @@ class ServicesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\service  $service
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(service $service)
     {
-        //
+        return view('services.edit', compact('service'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\service  $service
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, service $service)
     {
-        //
+        $service->update($request->all());
+
+        return redirect()->route('services.index')
+            ->with('success', 'Usługa '.$service->name.' została edytowana pomyslnie');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\service  $service
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(service $service)
     {
-        //
+        $service->delete();
+        return redirect()->route('services.index')
+            ->with('success', 'Usługa '.$service->name.' została usunięta pomyslnie');
     }
 }
