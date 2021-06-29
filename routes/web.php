@@ -51,7 +51,7 @@ Route::middleware([Admin_Company::class])->group(function(){
 	//Route::resource('companies', App\Http\Controllers\CompaniesController::class);
 //});
 
-Route::get('redirects', 'App\Http\Controllers\HomeController@index');
+Route::get('redirects', 'App\Http\Controllers\HomeController@index')->name('redirects');
 
 Route::resource('services', App\Http\Controllers\ServicesController::class);
 Route::resource('customers', App\Http\Controllers\CustomerController::class);

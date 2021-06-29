@@ -72,10 +72,8 @@ class CompaniesController extends Controller
             ->join('areas' , 'companies.area_id' , '=','areas.id')
             ->select ('companies.*', 'areas.county')
             ->get();
-        if(auth()->user()->role==1)
-            return view('companies.index', compact('companies'));
-        else
-            return view('dashboard');
+
+        return view('/panel');
     }
 
     /**
