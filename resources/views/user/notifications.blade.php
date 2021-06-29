@@ -1,5 +1,5 @@
 <x-app-layout>
-    <header class="masthead bg-primary text-white text-center" style="padding: 50px">
+    <header class="masthead bg-primary text-white text-center">
         <h1 class="masthead-heading mb-0">MOJE ZGŁOSZENIA</h1>
     </header>
     <section class="masthead page-section portfolio" id="portfolio">

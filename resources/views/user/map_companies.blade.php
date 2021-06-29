@@ -95,7 +95,7 @@
         }
     </style>
     <header class="masthead bg-primary text-white text-center" >
-        <h1 class="masthead-heading mb-0" >DODAJ ZGŁOSZENIE</h1>
+        <h1 class="masthead-heading mb-0" >SPRAWDŹ DOSTĘPNOŚĆ OFERTY NA MAPIE</h1>
     </header><br>
         <div class="row justify-content-center">
             <div id="Map" style="height: 400px; width: 60%;"></div>
