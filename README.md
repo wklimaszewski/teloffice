@@ -13,3 +13,9 @@
         <p class="pre-wrap masthead-subheading font-weight-light mb-0">Twoje intenetowe biuro obsługi klienta</p>
     </div>
 </header>
+
+<h1>Przykładowa faktura wygenerowana przez aplikacje!</h1>
+[faktura](https://user-images.githubusercontent.com/64831922/130855894-ebb4bfa3-2dac-4f5d-b4f2-276f61a45b0e.png)
+<h1>Integracja systemu PayPal<h1>
+    ![paypal](https://user-images.githubusercontent.com/64831922/130855996-1b9b5db7-6686-4121-bd50-46922f22b32a.png)
+
